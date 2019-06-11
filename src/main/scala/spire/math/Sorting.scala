@@ -5,7 +5,7 @@ package math
 import scala.language.implicitConversions
 
 import spire.algebra.Order
-import spire.syntax.order._
+import delegate spire.syntax.order._
 
 import scala.reflect.ClassTag
 

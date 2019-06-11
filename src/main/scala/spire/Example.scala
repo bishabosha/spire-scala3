@@ -1,12 +1,14 @@
 package spire
 
+import spire.algebra.Order
+import delegate spire.implicits.{for Order[Int]}
+
 object Example {
 
   def main(args: Array[String]): Unit = {
-    println("Hello world!")
-    println(msg)
+    val array = Array(2, 3, 1, 4)
+    spire.math.Sorting.sort(array)
+    println(array.mkString("(",",",")"))
   }
-
-  def msg = "I was compiled by dotty :)"
 
 }

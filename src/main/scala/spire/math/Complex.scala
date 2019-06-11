@@ -3,8 +3,8 @@ package math
 
 import spire.algebra._
 
-import spire.syntax.field._
-import spire.syntax.order._
+import delegate spire.syntax.field._
+import delegate spire.syntax.order._
 
 
 object Complex {
@@ -35,8 +35,6 @@ object Complex {
   * less general than the Cayley-Dickson construction.
   */
 final case class Complex[@specialized(Float, Double) T](real: T, imag: T) extends Serializable { lhs =>
-
-  import spire.syntax.order._
 
   def absSquare(implicit r: Field[T]): T = real*real + imag*imag
 
