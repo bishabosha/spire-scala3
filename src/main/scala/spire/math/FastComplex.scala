@@ -73,22 +73,22 @@ class FloatComplex(val u: Long) extends AnyVal {
 object FastComplex {
   import java.lang.Math.{atan2, cos, sin}
 
-  // note the superstitious use of @inline and final everywhere
+  // note the superstitious use of inline and final everywhere
 
   final def apply(real: Float, imag: Float): Long = encode(real, imag)
   final def apply(real: Double, imag: Double): Long = encode(real.toFloat, imag.toFloat)
 
   // encode a float as some bits
-  @inline final def bits(n: Float): Int = java.lang.Float.floatToIntBits(n)
+  inline final def bits(n: Float): Int = java.lang.Float.floatToIntBits(n)
 
   // decode some bits into a float
-  @inline final def bits(n: Int): Float = java.lang.Float.intBitsToFloat(n)
+  inline final def bits(n: Int): Float = java.lang.Float.intBitsToFloat(n)
 
   // get the real part of the complex number
-  @inline final def real(d: Long): Float = bits((d & 0xffffffff).toInt)
+  inline final def real(d: Long): Float = bits((d & 0xffffffff).toInt)
 
   // get the imaginary part of the complex number
-  @inline final def imag(d: Long): Float = bits((d >>> 32).toInt)
+  inline final def imag(d: Long): Float = bits((d >>> 32).toInt)
 
   // define some handy constants
   final val i: Long = encode(0.0F, 1.0F)
@@ -96,7 +96,7 @@ object FastComplex {
   final val zero: Long = encode(0.0F, 0.0F)
 
   // encode two floats representing a complex number
-  @inline final def encode(real: Float, imag: Float): Long =
+  inline final def encode(real: Float, imag: Float): Long =
     (bits(real) & 0xffffffffL) | ((bits(imag) & 0xffffffffL) << 32)
 
   // decode should be avoided in fast code because it allocates a Tuple2.

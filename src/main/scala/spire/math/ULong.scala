@@ -20,7 +20,7 @@ object ULong {
     if (n < 0) throw new IllegalArgumentException(s"$n < 0")
     else new ULong(n.toLong)
 
-  implicit def ulongToBigInt(n: ULong): BigInt = n.toBigInt
+  delegate ulongToBigInt for Conversion[ULong, BigInt] = _.toBigInt
 
   @inline final val MinValue = ULong(0L)
   @inline final val MaxValue = ULong(-1L)
@@ -85,8 +85,8 @@ class ULong(val signed: Long) extends AnyVal {
   else
     that.signed > this.signed && that.signed < 0L
 
-  @inline final def >= (that: ULong): Boolean = that <= this
-  @inline final def > (that: ULong): Boolean = that < this
+  inline final def >= (that: ULong): Boolean = that <= this
+  inline final def > (that: ULong): Boolean = that < this
 
   final def unary_- : ULong = ULong(-this.signed)
 

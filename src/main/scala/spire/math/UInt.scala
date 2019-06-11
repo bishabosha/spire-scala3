@@ -5,10 +5,10 @@ import spire.algebra.{CRig, Order}
 
 object UInt {
 
-  implicit final val algebra: Order[UInt] with CRig[UInt] = new UIntAlgebra
+  implicit final val algebra: Order[UInt] with CRig[UInt] = UIntAlgebra()
 
-  @inline final def apply(n: Int): UInt = new UInt(n)
-  @inline final def apply(n: Long): UInt = new UInt(n.toInt)
+  @inline final def apply(n: Int): UInt = UInt(n)
+  @inline final def apply(n: Long): UInt = UInt(n.toInt)
 
   @inline final val MinValue: UInt = UInt(0)
   @inline final val MaxValue: UInt = UInt(-1)

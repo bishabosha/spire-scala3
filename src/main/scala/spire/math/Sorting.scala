@@ -62,7 +62,7 @@ object InsertionSort extends Sort {
  * extra space (other than stack). It uses InsertionSort for sorting very small arrays.
  */
 object QuickSort {
-  @inline final def limit: Int = 16
+  inline final def limit: Int = 16
 
   /**
     * Uses quicksort on `data` to sort the entries. Operates in place.
