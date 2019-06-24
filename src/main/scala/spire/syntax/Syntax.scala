@@ -53,6 +53,7 @@ trait FieldSyntax extends CRingSyntax {
 
 trait CforSyntax {
   import macros._
+  import collection.immutable.NumericRange
 
   inline def cfor[A](init: A)(test: => A => Boolean, next: => A => A)(body: => A => Unit): Unit =
     ${ cforMacro('init, 'test, 'next, 'body) }
@@ -62,6 +63,12 @@ trait CforSyntax {
 
   inline def cforRange2(r1: => Range, r2: => Range)(body: => (Int, Int) => Unit): Unit =
     cforRange(r1) { x => cforRange(r2) { y => body(x, y) } }
+
+  inline def cforRangeL(r: => NumericRange[Long])(body: => Long => Unit): Unit =
+    ${ cforRangeMacroLong('r, 'body) }
+
+  inline def cforRangeL2(r1: => NumericRange[Long], r2: => NumericRange[Long])(body: => (Long, Long) => Unit): Unit =
+    cforRangeL(r1) { x => cforRangeL(r2) { y => body(x, y) } }
 }
 
 trait AllSyntax extends
