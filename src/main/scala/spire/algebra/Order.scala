@@ -87,7 +87,7 @@ object Order extends OrderFunctions[Order] {
   /**
    * Access an implicit `Order[A]`.
    */
-  inline final def apply[A] given (ev: Order[A]): Order[A] = ev
+  inline final def apply[A] given Order[A]: Order[A] = the[Order[A]]
 
   /**
    * Convert an implicit `Order[B]` to an `Order[A]` using the given

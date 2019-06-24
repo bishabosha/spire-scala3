@@ -1,4 +1,6 @@
-package spire.algebra
+package spire.math
+
+import spire.algebra._
 
 class Rat(val num: BigInt, val den: BigInt) extends Serializable { lhs =>
 

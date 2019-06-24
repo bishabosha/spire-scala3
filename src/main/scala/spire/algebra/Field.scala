@@ -26,7 +26,5 @@ trait FieldFunctions[F[T] <: Field[T]] extends CRingFunctions[F] {
 }
 
 object Field extends FieldFunctions[Field] {
-
-  inline final def apply[A] given (ev: Field[A]): Field[A] = ev
-
+  inline final def apply[A] given Field[A]: Field[A] = the[Field[A]]
 }
