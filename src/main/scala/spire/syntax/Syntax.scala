@@ -57,10 +57,11 @@ trait CforSyntax {
   inline def cfor[A](init: A)(test: => A => Boolean, next: => A => A)(body: => A => Unit): Unit =
     ${ cforMacro('init, 'test, 'next, 'body) }
 
-  // def cforRange(r: Range)(body: Int => Unit): Unit =
-  //   macro Syntax.cforRangeMacro
-  // def cforRange2(r1: Range, r2: Range)(body: (Int, Int) => Unit): Unit =
-  //   macro Syntax.cforRange2Macro
+  inline def cforRange(r: => Range)(body: => Int => Unit): Unit =
+    ${ cforRangeMacro('r, 'body) }
+
+  inline def cforRange2(r1: => Range, r2: => Range)(body: => (Int, Int) => Unit): Unit =
+    cforRange(r1) { x => cforRange(r2) { y => body(x, y) } }
 }
 
 trait AllSyntax extends
