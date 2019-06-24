@@ -9,7 +9,7 @@ object UInt {
 
   implicit final val algebra: Order[UInt] with CRig[UInt] = UIntAlgebra()
 
-  final def apply(n: Long): UInt = UInt(n.toInt)
+  final def apply(n: Long): UInt = UInt(the[Numeric[Long]].toLong(n))
 
   @inline final val MinValue: UInt = UInt(0)
   @inline final val MaxValue: UInt = UInt(-1)
