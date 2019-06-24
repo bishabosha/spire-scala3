@@ -51,17 +51,20 @@ trait FieldSyntax extends CRingSyntax {
   }
 }
 
-// trait CforSyntax {
-//   def cfor[A](init:A)(test:A => Boolean, next:A => A)(body:A => Unit): Unit =
-//     macro Syntax.cforMacro[A]
-//   def cforRange(r: Range)(body: Int => Unit): Unit =
-//     macro Syntax.cforRangeMacro
-//   def cforRange2(r1: Range, r2: Range)(body: (Int, Int) => Unit): Unit =
-//     macro Syntax.cforRange2Macro
-// }
+trait CforSyntax {
+  import macros._
+
+  inline def cfor[A](init: A)(test: => A => Boolean, next: => A => A)(body: => A => Unit): Unit =
+    ${ cforMacro('init, 'test, 'next, 'body) }
+
+  // def cforRange(r: Range)(body: Int => Unit): Unit =
+  //   macro Syntax.cforRangeMacro
+  // def cforRange2(r1: Range, r2: Range)(body: (Int, Int) => Unit): Unit =
+  //   macro Syntax.cforRange2Macro
+}
 
 trait AllSyntax extends
-  // CforSyntax with
+  CforSyntax with
   EqSyntax with
   PartialOrderSyntax with
   OrderSyntax with

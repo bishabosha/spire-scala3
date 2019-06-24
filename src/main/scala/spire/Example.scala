@@ -11,4 +11,6 @@ object Example {
     println(array.mkString("(",",",")"))
   }
 
+  val msg = "I was compiled by dotty :)"
+
 }

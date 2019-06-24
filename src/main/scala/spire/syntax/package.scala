@@ -1,6 +1,6 @@
 package spire.syntax
 
-// object cfor extends CforSyntax
+object cfor extends CforSyntax
 
 object eq extends EqSyntax
 object partialOrder extends PartialOrderSyntax
