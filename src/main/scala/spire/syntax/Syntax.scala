@@ -39,7 +39,7 @@ trait CRigSyntax {
 
 trait CRingSyntax extends CRigSyntax {
   delegate cringSyntax [A:CRing] {
-    inline def (lhs: A) unary_- : A   = CRing[A].negate(lhs)
+    inline def (lhs: A) unary_-   : A = CRing[A].negate(lhs)
     inline def (lhs: A) - (rhs: A): A = CRing[A].minus(lhs, rhs)
   }
 }
@@ -47,7 +47,7 @@ trait CRingSyntax extends CRigSyntax {
 trait FieldSyntax extends CRingSyntax {
   delegate fieldSyntax [A:Field] {
     inline def (lhs: A) reciprocal(): A = Field[A].reciprocal(lhs)
-    inline def (lhs: A) / (rhs:A): A    = Field[A].div(lhs, rhs)
+    inline def (lhs: A) / (rhs: A)  : A = Field[A].div(lhs, rhs)
   }
 }
 
