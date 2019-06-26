@@ -56,7 +56,7 @@ trait CforSyntax {
   import collection.immutable.NumericRange
 
   inline def cfor[A](init: A)(test: => A => Boolean, next: => A => A)(body: => A => Unit): Unit =
-    ${ cforMacro('init, 'test, 'next, 'body) }
+    cforInline(init, test, next, body)
 
   inline def cforRange(r: => Range)(body: => Int => Unit): Unit =
     ${ cforRangeMacro('r, 'body) }
