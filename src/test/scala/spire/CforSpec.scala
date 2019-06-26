@@ -38,10 +38,10 @@ object CforSpec extends Properties("cfor") {
     List.range(0, n + 1) =? fill(n)
   }
 
-  property("fillList with cforRangeL using to") = forAll(posNum[Long]) { n =>
+  property("fillList with cforRange[Long] using to") = forAll(posNum[Long]) { n =>
 
     def fill(n: Long): List[Long] = fillList { b =>
-      cforRangeL(0L to n)(b += _)
+      cforRange(0L to n)(b += _)
     }
 
     List.range(0L, n + 1L) =? fill(n)
@@ -56,10 +56,10 @@ object CforSpec extends Properties("cfor") {
     List.range(0, n + 1, step) =? fill(n, step)
   }
 
-  property("fillList with cforRangeL using to, by (positive)") = forAll(posNum[Long], rangeL) { (n, step) =>
+  property("fillList with cforRange[Long] using to, by (positive)") = forAll(posNum[Long], rangeL) { (n, step) =>
 
     def fill(n: Long, step: Long): List[Long] = fillList { b =>
-      cforRangeL(0L to n by step)(b += _)
+      cforRange(0L to n by step)(b += _)
     }
 
     List.range(0L, n + 1L, step) =? fill(n, step)
@@ -74,10 +74,10 @@ object CforSpec extends Properties("cfor") {
     List.range(0, n - 1, -step) =? fill(n, -step)
   }
 
-  property("fillList with cforRangeL using to, by (negative)") = forAll(posNum[Long], rangeL) { (n, step) =>
+  property("fillList with cforRange[Long] using to, by (negative)") = forAll(posNum[Long], rangeL) { (n, step) =>
 
     def fill(n: Long, step: Long): List[Long] = fillList { b =>
-      cforRangeL(0L to n by step)(b += _)
+      cforRange(0L to n by step)(b += _)
     }
 
     List.range(0L, n - 1, -step) =? fill(n, -step)
@@ -92,10 +92,10 @@ object CforSpec extends Properties("cfor") {
     List.range(0, n, step) =? fill(n, step)
   }
 
-  property("fillList with cforRangeL using until, by (positive)") = forAll(posNum[Long], rangeL) { (n, step) =>
+  property("fillList with cforRange[Long] using until, by (positive)") = forAll(posNum[Long], rangeL) { (n, step) =>
 
     def fill(n: Long, step: Long): List[Long] = fillList { b =>
-      cforRangeL(0L until n by step)(b += _)
+      cforRange(0L until n by step)(b += _)
     }
 
     List.range(0L, n, step) =? fill(n, step)
@@ -110,10 +110,10 @@ object CforSpec extends Properties("cfor") {
     List.range(0, n, -step) =? fill(n, -step)
   }
 
-  property("fillList with cforRangeL using until, by (negative)") = forAll(posNum[Long], rangeL) { (n, step) =>
+  property("fillList with cforRange[Long] using until, by (negative)") = forAll(posNum[Long], rangeL) { (n, step) =>
 
     def fill(n: Long, step: Long): List[Long] = fillList { b =>
-      cforRangeL(0L until n by step)(b += _)
+      cforRange(0L until n by step)(b += _)
     }
 
     List.range(0L, n, -step) =? fill(n, -step)
@@ -128,10 +128,10 @@ object CforSpec extends Properties("cfor") {
     List.range(0, n) =? fill(n)
   }
 
-  property("fillList with cforRangeL using until") = forAll(posNum[Long]) { n =>
+  property("fillList with cforRange[Long] using until") = forAll(posNum[Long]) { n =>
 
     def fill(n: Long): List[Long] = fillList { b =>
-      cforRangeL(0L until n)(b += _)
+      cforRange(0L until n)(b += _)
     }
 
     List.range(0L, n) =? fill(n)
