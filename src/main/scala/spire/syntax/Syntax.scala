@@ -45,9 +45,9 @@ trait CRingSyntax extends CRigSyntax {
 }
 
 trait FieldSyntax extends CRingSyntax {
-  delegate [A:Field] {
-    inline def (lhs: A) reciprocal(): A        = Field[A].reciprocal(lhs)
-    inline def (lhs: A) / [A:Field] (rhs:A): A = Field[A].div(lhs, rhs)
+  delegate fieldSyntax [A:Field] {
+    inline def (lhs: A) reciprocal(): A = Field[A].reciprocal(lhs)
+    inline def (lhs: A) / (rhs:A): A    = Field[A].div(lhs, rhs)
   }
 }
 
