@@ -58,17 +58,11 @@ trait CforSyntax {
   inline def cfor[A](init: => A)(test: => A => Boolean, next: => A => A)(body: => A => Unit): Unit =
     cforInline(init, test, next, body)
 
-  inline def cforRange(r: => Range)(body: => Int => Unit): Unit =
-    ${ cforRangeMacro('r, 'body) }
+  inline def cforRange[A <: RangeLike](r: => A)(body: => RangeElem[A] => Unit): Unit =
+    ${ cforRangeMacroGen('r, 'body) }
 
-  inline def cforRange2(r1: => Range, r2: => Range)(body: => (Int, Int) => Unit): Unit =
+  inline def cforRange2[A <: RangeLike](r1: => A, r2: => A)(body: => (RangeElem[A], RangeElem[A]) => Unit): Unit =
     cforRange(r1) { x => cforRange(r2) { y => body(x, y) } }
-
-  inline def cforRangeL(r: => NumericRange[Long])(body: => Long => Unit): Unit =
-    ${ cforRangeMacroLong('r, 'body) }
-
-  inline def cforRangeL2(r1: => NumericRange[Long], r2: => NumericRange[Long])(body: => (Long, Long) => Unit): Unit =
-    cforRangeL(r1) { x => cforRangeL(r2) { y => body(x, y) } }
 }
 
 trait AllSyntax extends
