@@ -9,12 +9,11 @@ import tasty.Reflection
 
 import collection.immutable.NumericRange
 
-def cforMacro[A](init: Expr[A], test: Expr[A => Boolean], next: Expr[A => A], body: Expr[A => Unit])
-    given Type[A]: Expr[Unit] = '{
-  var index = $init
-  while (${ test('index) }) {
-    ${ body('index) }
-    index = ${ next('index) }
+inline def cforInline[A](init: => A, test: => A => Boolean, next: => A => A, body: => A => Unit): Unit = {
+  var index = init
+  while (test(index)) {
+    body(index)
+    index = next(index)
   }
 }
 
