@@ -20,7 +20,7 @@ inline def cforInline[A](init: => A, test: => A => Boolean, next: => A => A, bod
 def cforRangeMacroLong(r: Expr[NumericRange[Long]], body: Expr[Long => Unit]) given Reflection : Expr[Unit] = {
 
   def strideUpUntil(fromExpr: Expr[Long], untilExpr: Expr[Long], stride: Expr[Long]): Expr[Unit] = '{
-    var index = ($fromExpr)
+    var index = $fromExpr
     val limit = $untilExpr
     while (index < limit) {
       ${ body('index) }
