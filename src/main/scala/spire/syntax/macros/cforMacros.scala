@@ -23,12 +23,17 @@ inline def cforInline[A](init: => A, test: => A => Boolean, next: => A => A, bod
   }
 }
 
+inline def tag[A: Type] given (ref: Reflection): ref.Type = {
+  import ref._
+  the[quoted.Type[A]].unseal.tpe
+}
+
 def cforRangeMacroGen[A <: RangeLike : Type](r: Expr[A], body: Expr[RangeElem[A] => Unit])
     given (ref: Reflection): Expr[Unit] = {
   import ref._
-  val ATag                = the[quoted.Type[A]].unseal.tpe
-  val RangeTag            = the[quoted.Type[Range]].unseal.tpe
-  val NumericRangeLongTag = the[quoted.Type[NumericRange[Long]]].unseal.tpe
+  val ATag                = tag[A]
+  val RangeTag            = tag[Range]
+  val NumericRangeLongTag = tag[NumericRange[Long]]
 
   if ATag <:< RangeTag then
     cforRangeMacro(r.cast[Range], body.cast[Int => Unit])
