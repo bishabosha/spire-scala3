@@ -31,16 +31,12 @@ inline def tag[A: Type] given (ref: Reflection): ref.Type = {
 def cforRangeMacroGen[A <: RangeLike : Type](r: Expr[A], body: Expr[RangeElem[A] => Unit])
     given (ref: Reflection): Expr[Unit] = {
   import ref._
-  val ATag                = tag[A]
-  val RangeTag            = tag[Range]
-  val NumericRangeLongTag = tag[NumericRange[Long]]
 
-  if ATag <:< RangeTag then
-    cforRangeMacro(r.cast[Range], body.cast[Int => Unit])
-  else if ATag <:< NumericRangeLongTag then
-    cforRangeMacroLong(r.cast[NumericRange[Long]], body.cast[Long => Unit])
-  else
-    QuoteError(s"Uneligable Range type ${ATag.show}", r)
+  tag[A] match {
+    case t if t <:< tag[Range]              => cforRangeMacro(r.cast[Range], body.cast[Int => Unit])
+    case t if t <:< tag[NumericRange[Long]] => cforRangeMacroLong(r.cast[NumericRange[Long]], body.cast[Long => Unit])
+    case t                                  => QuoteError(s"Uneligable Range type ${t.show}", r)
+  }
 }
 
 def cforRangeMacroLong(r: Expr[NumericRange[Long]], body: Expr[Long => Unit]) given Reflection : Expr[Unit] = {
