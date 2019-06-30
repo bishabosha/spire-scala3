@@ -63,6 +63,11 @@ trait CforSyntax {
 
   inline def cforRange2[A <: RangeLike](r1: => A, r2: => A)(body: => (RangeElem[A], RangeElem[A]) => Unit): Unit =
     cforRange(r1) { x => cforRange(r2) { y => body(x, y) } }
+
+  /** Alias of [[cforRange]] as an infix method.
+   */
+  inline def (r: => A) peek [A <: RangeLike](body: => RangeElem[A] => Unit): Unit =
+    cforRange(r)(body)
 }
 
 trait AllSyntax extends

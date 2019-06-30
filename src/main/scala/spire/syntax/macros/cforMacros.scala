@@ -39,7 +39,8 @@ def cforRangeMacroGen[A <: RangeLike : Type](r: Expr[A], body: Expr[RangeElem[A]
   }
 }
 
-def cforRangeMacroLong(r: Expr[NumericRange[Long]], body: Expr[Long => Unit]) given Reflection : Expr[Unit] = {
+def cforRangeMacroLong(r: Expr[NumericRange[Long]], body: Expr[Long => Unit]) given (ref: Reflection) : Expr[Unit] = {
+  import ref._
 
   def strideUpUntil(fromExpr: Expr[Long], untilExpr: Expr[Long], stride: Expr[Long]): Expr[Unit] = '{
     var index = $fromExpr
@@ -83,25 +84,34 @@ def cforRangeMacroLong(r: Expr[NumericRange[Long]], body: Expr[Long => Unit]) gi
 
     case '{ ($i: Long) until $j by $step } =>
       step match {
-        case Const(k) if k > 0  => strideUpUntil(i,j,k)
-        case Const(k) if k < 0  => strideDownUntil(i,j,-k)
+        case Const(k) if k  > 0 => strideUpUntil(i,j,k)
+        case Const(k) if k  < 0 => strideDownUntil(i,j,-k)
         case Const(k) if k == 0 => QuoteError("zero stride", step)
-        case _                  => '{ val b = $body; $r.foreach(b) }
+
+        case _ =>
+          warning(s"defaulting to foreach, can not optimise non-constant step", step.unseal.pos)
+          '{ val b = $body; $r.foreach(b) }
       }
 
     case '{ ($i: Long) to $j by $step } =>
       step match {
-        case Const(k) if k > 0  => strideUpTo(i,j,k)
-        case Const(k) if k < 0  => strideDownTo(i,j,-k)
+        case Const(k) if k  > 0 => strideUpTo(i,j,k)
+        case Const(k) if k  < 0 => strideDownTo(i,j,-k)
         case Const(k) if k == 0 => QuoteError("zero stride", step)
-        case _                  => '{ val b = $body; $r.foreach(b) }
+
+        case _ =>
+          warning(s"defaulting to foreach, can not optimise non-constant step", step.unseal.pos)
+          '{ val b = $body; $r.foreach(b) }
       }
 
-    case _ => '{ val b = $body; $r.foreach(b) }
+    case _ =>
+      warning(s"defaulting to foreach, can not optimise range expression", r.unseal.pos)
+      '{ val b = $body; $r.foreach(b) }
   }
 }
 
-def cforRangeMacro(r: Expr[Range], body: Expr[Int => Unit]) given Reflection : Expr[Unit] = {
+def cforRangeMacro(r: Expr[Range], body: Expr[Int => Unit]) given (ref: Reflection) : Expr[Unit] = {
+  import ref._
   
   def strideUpUntil(fromExpr: Expr[Int], untilExpr: Expr[Int], stride: Expr[Int]): Expr[Unit] = '{
     var index = $fromExpr
@@ -138,27 +148,35 @@ def cforRangeMacro(r: Expr[Range], body: Expr[Int => Unit]) given Reflection : E
       index -= $stride
     }
   }
-  
+
   r match {
     case '{ ($i: Int) until $j } => strideUpUntil(i,j,1)
     case '{ ($i: Int) to $j }    => strideUpTo(i,j,1)
 
     case '{ ($i: Int) until $j by $step } =>
       step match {
-        case Const(k) if k > 0  => strideUpUntil(i,j,k)
-        case Const(k) if k < 0  => strideDownUntil(i,j,-k)
+        case Const(k) if k  > 0 => strideUpUntil(i,j,k)
+        case Const(k) if k  < 0 => strideDownUntil(i,j,-k)
         case Const(k) if k == 0 => QuoteError("zero stride", step)
-        case _                  => '{ val b = $body; $r.foreach(b) }
+
+        case _ =>
+          warning(s"defaulting to foreach, can not optimise non-constant step", step.unseal.pos)
+          '{ val b = $body; $r.foreach(b) }
       }
 
     case '{ ($i: Int) to $j by $step } =>
       step match {
-        case Const(k) if k > 0  => strideUpTo(i,j,k)
-        case Const(k) if k < 0  => strideDownTo(i,j,-k)
+        case Const(k) if k  > 0 => strideUpTo(i,j,k)
+        case Const(k) if k  < 0 => strideDownTo(i,j,-k)
         case Const(k) if k == 0 => QuoteError("zero stride", step)
-        case _                  => '{ val b = $body; $r.foreach(b) }
+
+        case _ =>
+          warning(s"defaulting to foreach, can not optimise non-constant step", step.unseal.pos)
+          '{ val b = $body; $r.foreach(b) }
       }
 
-    case _ => '{ val b = $body; $r.foreach(b) }
+    case _ =>
+      warning(s"defaulting to foreach, can not optimise range expression", r.unseal.pos)
+      '{ val b = $body; $r.foreach(b) }
   }
 }
