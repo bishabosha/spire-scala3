@@ -15,6 +15,8 @@ type RangeElem[X] = X match {
   case NumericRange[Long] => Long
 }
 
+private type RangeL = NumericRange[Long]
+
 inline def cforInline[A](init: => A, test: => A => Boolean, next: => A => A, body: => A => Unit): Unit = {
   var index = init
   while (test(index)) {
@@ -23,23 +25,18 @@ inline def cforInline[A](init: => A, test: => A => Boolean, next: => A => A, bod
   }
 }
 
-inline def tag[A: Type] given (ref: Reflection): ref.Type = {
-  import ref._
-  the[quoted.Type[A]].unseal.tpe
-}
-
 def cforRangeMacroGen[A <: RangeLike : Type](r: Expr[A], body: Expr[RangeElem[A] => Unit])
     given (ref: Reflection): Expr[Unit] = {
   import ref._
 
-  tag[A] match {
-    case t if t <:< tag[Range]              => cforRangeMacro(r.cast[Range], body.cast[Int => Unit])
-    case t if t <:< tag[NumericRange[Long]] => cforRangeMacroLong(r.cast[NumericRange[Long]], body.cast[Long => Unit])
-    case t                                  => QuoteError(s"Uneligable Range type ${t.show}", r)
+  typeOf[A] match {
+    case t if t <:< typeOf[Range]  => cforRangeMacro(r.cast[Range], body.cast[Int => Unit])
+    case t if t <:< typeOf[RangeL] => cforRangeMacroLong(r.cast[RangeL], body.cast[Long => Unit])
+    case t                         => QuoteError(s"Uneligable Range type ${t.show}", r)
   }
 }
 
-def cforRangeMacroLong(r: Expr[NumericRange[Long]], body: Expr[Long => Unit]) given (ref: Reflection) : Expr[Unit] = {
+def cforRangeMacroLong(r: Expr[RangeL], body: Expr[Long => Unit]) given (ref: Reflection) : Expr[Unit] = {
   import ref._
 
   def strideUpUntil(fromExpr: Expr[Long], untilExpr: Expr[Long], stride: Expr[Long]): Expr[Unit] = '{
