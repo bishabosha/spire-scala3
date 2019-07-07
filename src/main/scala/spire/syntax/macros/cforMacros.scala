@@ -6,18 +6,11 @@ import quoted._
 import quoted.autolift._
 import quoted.matching._
 import tasty.Reflection
-
 import collection.immutable.NumericRange
 
-type RangeLike = Range | NumericRange[Long]
-type RangeElem[X] = X match {
-  case Range              => Int
-  case NumericRange[Long] => Long
-}
+import spire.syntax.cfor.{RangeLike, RangeElem}
 
-private type RangeL = NumericRange[Long]
-
-inline def cforInline[A](init: => A, test: => A => Boolean, next: => A => A, body: => A => Unit): Unit = {
+inline def cforInline[R](init: => R, test: => R => Boolean, next: => R => R, body: => R => Unit): Unit = {
   var index = init
   while (test(index)) {
     body(index)
@@ -25,18 +18,20 @@ inline def cforInline[A](init: => A, test: => A => Boolean, next: => A => A, bod
   }
 }
 
-def cforRangeMacroGen[A <: RangeLike : Type](r: Expr[A], body: Expr[RangeElem[A] => Unit])
+def cforRangeMacroGen[R <: RangeLike : Type](r: Expr[R], body: Expr[RangeElem[R] => Unit])
     given (ref: Reflection): Expr[Unit] = {
   import ref._
 
-  typeOf[A] match {
+  type RangeL = NumericRange[Long]
+
+  typeOf[R] match {
     case t if t <:< typeOf[Range]  => cforRangeMacro(r.cast[Range], body.cast[Int => Unit])
     case t if t <:< typeOf[RangeL] => cforRangeMacroLong(r.cast[RangeL], body.cast[Long => Unit])
     case t                         => QuoteError(s"Uneligable Range type ${t.show}", r)
   }
 }
 
-def cforRangeMacroLong(r: Expr[RangeL], body: Expr[Long => Unit]) given (ref: Reflection) : Expr[Unit] = {
+def cforRangeMacroLong(r: Expr[NumericRange[Long]], body: Expr[Long => Unit]) given (ref: Reflection) : Expr[Unit] = {
   import ref._
 
   def strideUpUntil(fromExpr: Expr[Long], untilExpr: Expr[Long], stride: Expr[Long]): Expr[Unit] = '{
