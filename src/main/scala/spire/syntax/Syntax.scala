@@ -55,18 +55,25 @@ trait CforSyntax {
   import macros._
   import collection.immutable.NumericRange
 
+  final type RangeLike = Range | NumericRange[Long]
+
+  final type RangeElem[X <: RangeLike] = X match {
+    case Range              => Int
+    case NumericRange[Long] => Long
+  }
+
   inline def cfor[A](init: => A)(test: => A => Boolean, next: => A => A)(body: => A => Unit): Unit =
     cforInline(init, test, next, body)
 
-  inline def cforRange[A <: RangeLike](r: => A)(body: => RangeElem[A] => Unit): Unit =
+  inline def cforRange[R <: RangeLike](r: => R)(body: => RangeElem[R] => Unit): Unit =
     ${ cforRangeMacroGen('r, 'body) }
 
-  inline def cforRange2[A <: RangeLike](r1: => A, r2: => A)(body: => (RangeElem[A], RangeElem[A]) => Unit): Unit =
+  inline def cforRange2[R <: RangeLike](r1: => R, r2: => R)(body: => (RangeElem[R], RangeElem[R]) => Unit): Unit =
     cforRange(r1) { x => cforRange(r2) { y => body(x, y) } }
 
   /** Alias of [[cforRange]] as an infix method.
    */
-  inline def (r: => A) peek [A <: RangeLike](body: => RangeElem[A] => Unit): Unit =
+  inline def (r: => R) peek [R <: RangeLike](body: => RangeElem[R] => Unit): Unit =
     cforRange(r)(body)
 }
 
