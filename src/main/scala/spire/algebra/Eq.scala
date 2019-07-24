@@ -36,7 +36,7 @@ object Eq extends EqFunctions[Eq] {
   /**
    * Access an implicit `Eq[A]`.
    */
-  inline final def apply[A] given Eq[A]: Eq[A] = the[Eq[A]]
+  inline def apply[A] given Eq[A]: Eq[A] = the[Eq[A]]
 
   /**
    * Convert an implicit `Eq[B]` to an `Eq[A]` using the given
