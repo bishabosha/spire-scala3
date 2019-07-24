@@ -5,7 +5,7 @@ package math
 import scala.language.implicitConversions
 
 import spire.algebra.Order
-import delegate spire.syntax.order._
+import given spire.syntax.order._
 
 import scala.reflect.ClassTag
 
@@ -62,7 +62,7 @@ object InsertionSort extends Sort {
  * extra space (other than stack). It uses InsertionSort for sorting very small arrays.
  */
 object QuickSort {
-  inline final def limit: Int = 16
+  inline val limit: Int = 16
 
   /**
     * Uses quicksort on `data` to sort the entries. Operates in place.

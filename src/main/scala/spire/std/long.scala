@@ -1,6 +1,8 @@
 package spire
 package std
 
+import language.implicitConversions
+
 import spire.algebra.{Order, CRing}
 import java.lang.Math
 

@@ -89,7 +89,7 @@ object Rat {
 
   def unapply(r: Rat): Some[(BigInt, BigInt)] = Some((r.num, r.den))
 
-  delegate ratAlgebra for RatAlgebra = RatAlgebra()
+  given ratAlgebra as RatAlgebra = RatAlgebra()
 }
 
 class RatAlgebra extends Field[Rat] with Order[Rat] with Serializable {

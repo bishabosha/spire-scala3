@@ -1,6 +1,8 @@
 package spire
 package std
 
+import language.implicitConversions
+
 import spire.algebra.{Field, Order}
 import java.lang.Math
 

@@ -1,6 +1,8 @@
 package spire
 package math
 
+import language.implicitConversions
+
 import spire.algebra.{CRig, Order}
 import java.lang.Math
 import scala.annotation.tailrec
@@ -9,7 +11,7 @@ object ULong {
 
   implicit val algebra: Order[ULong] with CRig[ULong] = new ULongAlgebra
 
-  @inline final def apply(n: Long): ULong = new ULong(n)
+  inline def apply(n: Long): ULong = new ULong(n)
 
   final def apply(s: String): ULong = fromBigInt(BigInt(s))
 
@@ -20,7 +22,7 @@ object ULong {
     if (n < 0) throw new IllegalArgumentException(s"$n < 0")
     else new ULong(n.toLong)
 
-  delegate ulongToBigInt for Conversion[ULong, BigInt] = _.toBigInt
+  given ulongToBigInt as Conversion[ULong, BigInt] = _.toBigInt
 
   @inline final val MinValue = ULong(0L)
   @inline final val MaxValue = ULong(-1L)

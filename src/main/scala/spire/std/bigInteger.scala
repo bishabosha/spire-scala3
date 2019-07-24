@@ -1,6 +1,8 @@
 package spire
 package std
 
+import language.implicitConversions
+
 import java.math.BigInteger
 
 import spire.algebra.{CRing, Eq, Order}

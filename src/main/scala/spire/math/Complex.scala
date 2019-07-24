@@ -3,8 +3,8 @@ package math
 
 import spire.algebra._
 
-import delegate spire.syntax.field._
-import delegate spire.syntax.order._
+import given spire.syntax.field._
+import given spire.syntax.order._
 
 
 object Complex {
@@ -18,8 +18,8 @@ object Complex {
   def zero[@specialized(Float, Double) T](implicit T: Field[T]): Complex[T] =
     new Complex(T.zero, T.zero)
 
-  def fromInt[@specialized(Float, Double) T](n: Int)(implicit f: Field[T]): Complex[T] =
-    new Complex(f.fromInt(n), f.zero)
+  def fromInt[@specialized(Float, Double) T](n: Int)(implicit T: Field[T]): Complex[T] =
+    new Complex(T.fromInt(n), T.zero)
 
   def apply[@specialized(Float, Double) T: Field](real: T): Complex[T] =
     new Complex(real, CRing[T].zero)

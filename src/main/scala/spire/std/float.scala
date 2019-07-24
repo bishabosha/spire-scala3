@@ -1,6 +1,8 @@
 package spire
 package std
 
+import language.implicitConversions
+
 import spire.algebra.{Field, Order}
 
 final class FloatAlgebra extends Order[Float] with Field[Float] {

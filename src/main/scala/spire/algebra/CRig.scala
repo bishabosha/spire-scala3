@@ -74,5 +74,5 @@ trait CRigFunctions[C[T] <: CRig[T]] {
 }
 
 object CRig extends CRigFunctions[CRig] {
-  inline final def apply[A] given CRig[A]: CRig[A] = the[CRig[A]]
+  inline def apply[A] given CRig[A]: CRig[A] = the[CRig[A]]
 }
