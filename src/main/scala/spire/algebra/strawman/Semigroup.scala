@@ -1,6 +1,6 @@
 package spire.algebra.strawman
 
-import spire.{ Tag, tag }
+import spire.{ Tag, erasedTag }
 
 /**Semigroup as a match type, allowing for use site specialisation of the type parameter.
  * - does cause issues with unification of the type parameter T needing casts, until another way is found.
@@ -15,7 +15,9 @@ object Semigroups {
 
   trait Semigroup[A] {
 
-    inline def (x: T) + [T] (y: T): T = inline tag[T] match { case _: Tag[A] =>
+    final type Param = A
+
+    inline def (x: T) + [T] (y: T): T = inline erasedTag[T] match { case _: Tag[A] =>
       x plus y
     }
 

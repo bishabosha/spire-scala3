@@ -11,38 +11,34 @@ sealed trait Box[T] {
 object Box {
   import Tag._
 
-  given [T: Semigroup: CRig: Tag] as CRig[Box[T]], Semigroup[Box[T]] {
-    val zero = point(the[CRig[T]].zero.asInstanceOf[T])
-    val one  = point(the[CRig[T]].one.asInstanceOf[T])
+  given [T: CRig: Tag] as CRig[Box[T]], Semigroup[Box[T]] {
+    val zero = point(the[CRig[T]].zero.asInstanceOf[T]) // must use runtime tag
+    val one  = point(the[CRig[T]].one.asInstanceOf[T])  // must use runtime tag
     def (x: Box[T]) plus (y: Box[T]): Box[T]  = x + y
     def (x: Box[T]) times (y: Box[T]): Box[T] = x * y
   }
 
-  def apply(i: Int):  Box[Int]  = Box.species(i, "Int")
-  def apply(l: Long): Box[Long] = Box.species(l, "Long")
-  def apply[A](a: A): Box[A]    = Box.species(a, "A")
+  def apply(i: Int):  Box[Int]  = Box.species(i)
+  def apply(l: Long): Box[Long] = Box.species(l)
+  def apply[A](a: A): Box[A]    = Box.species(a)
 
-  private def point[A: Tag](f: A): Box[A] = Tag[A] match {
-    case IntTag  => Box(f)
-    case LongTag => Box(f)
-    case t       => Box(f)
+  private def point[A: Tag](a: A): Box[A] = Tag[A] match {
+    case IntTag  => Box(a)
+    case LongTag => Box(a)
+    case _       => Box(a)
   }
 
-  inline private def species[T](t: T, inline kind: String): Box[T] = {
+  inline private def species[T](t: T) given (tag: => Tag[T]): Box[T] = {
 
     class BoxT(val x: T) extends Box[T] {
 
-      def + (box: Box[T]) given Semigroup[T]: BoxT = (box: @unchecked) match { case box: BoxT =>
-        BoxT(x + box.x)
-      }
+      def + (box: Box[T]) given Semigroup[T] : BoxT = BoxT(x + box.asInstanceOf[BoxT].x)
+      def * (box: Box[T]) given CRig[T]      : BoxT = BoxT(x * box.asInstanceOf[BoxT].x)
 
-      def * (box: Box[T]) given CRig[T]: BoxT = (box: @unchecked) match { case box: BoxT =>
-        BoxT(x * box.x)
-      }
-
-      override def toString = s"Box$kind($x)"
+      override def toString = s"Box${tag.render}($x)"
     }
 
     BoxT(t)
+
   }
 }

@@ -1,6 +1,6 @@
 package spire.algebra.strawman
 
-import spire.{ Tag, tag }
+import spire.{ Tag, erasedTag }
 
 /**CRig as a match type, allowing for use site specialisation of the type parameter.
  * - does cause issues with unification of the type parameter T needing casts, until another way is found.
@@ -15,7 +15,7 @@ object CRigs {
 
   trait CRig[A] extends Semigroups.Semigroup[A] {
 
-    inline def (x: T) * [T] (y: T): T = inline tag[T] match { case _: Tag[A] =>
+    inline def (x: T) * [T] (y: T): T = inline erasedTag[T] match { case _: Tag[A] =>
       x times y
     }
 
@@ -26,12 +26,12 @@ object CRigs {
   }
 
   object Specialised {
-    trait IntCRig extends CRig[Int] {
+    trait IntCRig extends CRig[Int], Semigroup[Int] {
       def zero: Int
       def one: Int
       def (x: Int) times (y: Int): Int
     }
-    trait LongCRig extends CRig[Long] {
+    trait LongCRig extends CRig[Long], Semigroup[Long] {
       def zero: Long
       def one: Long
       def (x: Long) times (y: Long): Long
