@@ -2,7 +2,7 @@ package spire
 
 import spire.algebra.strawman.{ CRig, Semigroup }
 import spire.math.strawman.Box
-import given spire.algebra.strawman.std.{ for CRig[Int], CRig[Long], CRig[Unit] }, Box.{ for CRig[Box[_]] }
+import given spire.algebra.strawman.std.{ _: CRig[Int] | CRig[Long] | CRig[Unit] }, Box.{ _: CRig[Box[_]] }
 
 object SpecialisationExample {
 
