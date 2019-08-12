@@ -1,7 +1,7 @@
 package spire
 
 import spire.algebra.Order
-import given spire.implicits.{for Order[Int]}
+import given spire.implicits.{_: Order[Int]}
 
 object Example extends App {
   val array = Array(2, 3, 1, 4)

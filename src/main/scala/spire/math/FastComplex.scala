@@ -26,11 +26,11 @@ object FloatComplex {
   * The underlying implementation lives in the FastComplex object.
   */
 class FloatComplex(val u: Long) extends AnyVal {
-  override final def toString: String = "(%s+%si)" format (real, imag)
+  override final def toString: String = s"($real+${imag}i)"
 
   final def real: Float = FastComplex.real(u)
   final def imag: Float = FastComplex.imag(u)
-  final def repr: String = "FloatComplex(%s, %s)" format(real, imag)
+  final def repr: String = s"FloatComplex($real, $imag)"
   final def conjugate: FloatComplex = new FloatComplex(FastComplex.conjugate(u))
   final def isWhole: Boolean = FastComplex.isWhole(u)
   final def signum: Int = FastComplex.signum(u)
@@ -105,7 +105,7 @@ object FastComplex {
   final def decode(d: Long): (Float, Float) = (real(d), imag(d))
 
   // produces a string representation of the Long/(Float,Float)
-  final def toRepr(d: Long): String = "FastComplex(%s -> %s)" format(d, decode(d))
+  final def toRepr(d: Long): String = s"FastComplex($d -> ${decode(d)})"
 
   // get the complex conjugate
   final def conjugate(d: Long): Long = encode(real(d), -imag(d))

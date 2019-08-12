@@ -35,7 +35,7 @@ trait CRig[@sp(Int, Long, Float, Double) A] {
   def sumN(a: A, n: Int): A =
     if (n > 0) positiveSumN(a, n)
     else if (n == 0) zero
-    else throw new IllegalArgumentException("Illegal negative exponent to sumN: %s" format n)
+    else throw new IllegalArgumentException(s"Illegal negative exponent to sumN: $n")
 
   protected[this] def positiveSumN(a: A, n: Int): A = {
     @tailrec def loop(b: A, k: Int, extra: A): A =
