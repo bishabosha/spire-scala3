@@ -5,6 +5,7 @@ import compiletime.erasedValue
 erased def erasedTag[T]: Tag[T] = erasedValue[Tag[T]]
 
 enum Tag[A] {
+
   case UnitTag    extends Tag[Unit]
   case BooleanTag extends Tag[Boolean]
   case ByteTag    extends Tag[Byte]
@@ -14,6 +15,18 @@ enum Tag[A] {
   case FloatTag   extends Tag[Float]
   case DoubleTag  extends Tag[Double]
   case AnyTag[A]  extends Tag[A]
+
+  def render[T]: String = this match {
+    case UnitTag    => "Unit"
+    case BooleanTag => "Boolean"
+    case ByteTag    => "Byte"
+    case ShortTag   => "Short"
+    case IntTag     => "Int"
+    case LongTag    => "Long"
+    case FloatTag   => "Float"
+    case DoubleTag  => "Double"
+    case AnyTag()   => "Any"
+  }
 }
 
 object Tag {
@@ -27,20 +40,6 @@ object Tag {
   given as Tag[Float]   = FloatTag
   given as Tag[Double]  = DoubleTag
   given [A] as Tag[A]   = AnyTag()
-
-  given {
-    def (tag: Tag[T]) render[T]: String = tag match {
-      case UnitTag    => "Unit"
-      case BooleanTag => "Boolean"
-      case ByteTag    => "Byte"
-      case ShortTag   => "Short"
-      case IntTag     => "Int"
-      case LongTag    => "Long"
-      case FloatTag   => "Float"
-      case DoubleTag  => "Double"
-      case AnyTag()   => "Any"
-    }
-  }
 
   inline def apply[T: Tag] = the[Tag[T]]
 

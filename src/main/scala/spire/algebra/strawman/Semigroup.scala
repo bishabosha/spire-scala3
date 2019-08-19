@@ -5,10 +5,14 @@ import spire.{ Tag, erasedTag }
 /**Semigroup as a match type, allowing for use site specialisation of the type parameter.
  * - does cause issues with unification of the type parameter T needing casts, until another way is found.
  */
-type Semigroup[T] <: Semigroups.Semigroup[_] = T match {
+type Semigroup[T] <: Semigroups.Semigroup[?] = T match {
   case Int  => Semigroups.Specialised.IntSemigroup
   case Long => Semigroups.Specialised.LongSemigroup
   case _    => Semigroups.Semigroup[T]
+}
+
+object Semigroup {
+  inline given [T] as Semigroup[T.Param] given (T: Semigroup[T]) = T.asInstanceOf
 }
 
 object Semigroups {

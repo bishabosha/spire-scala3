@@ -5,10 +5,14 @@ import spire.{ Tag, erasedTag }
 /**CRig as a match type, allowing for use site specialisation of the type parameter.
  * - does cause issues with unification of the type parameter T needing casts, until another way is found.
  */
-type CRig[T] <: CRigs.CRig[_] = T match {
+type CRig[T] <: CRigs.CRig[?] = T match {
   case Int  => CRigs.Specialised.IntCRig
   case Long => CRigs.Specialised.LongCRig
   case _    => CRigs.CRig[T]
+}
+
+object CRig {
+  inline given [T] as CRig[T.Param] given (T: CRig[T]) = T.asInstanceOf
 }
 
 object CRigs {
