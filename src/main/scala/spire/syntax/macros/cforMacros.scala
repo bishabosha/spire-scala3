@@ -3,7 +3,7 @@ package spire.syntax.macros
 import language.implicitConversions
 
 import quoted._
-import quoted.autolift._
+import given quoted.autolift._
 import quoted.matching._
 import collection.immutable.NumericRange
 
@@ -71,8 +71,8 @@ def cforRangeMacroLong(r: Expr[NumericRange[Long]], body: Expr[Long => Unit]) gi
   }
 
   r match {
-    case '{ ($i: Long) until $j } => strideUpUntil(i,j,1)
-    case '{ ($i: Long) to $j }    => strideUpTo(i,j,1)
+    case '{ ($i: Long) until $j } => strideUpUntil(i,j,1L)
+    case '{ ($i: Long) to $j }    => strideUpTo(i,j,1L)
 
     case '{ ($i: Long) until $j by $step } =>
       step match {

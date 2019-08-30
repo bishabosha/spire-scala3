@@ -45,7 +45,7 @@ trait PartialOrder[@sp A] extends Eq[A] { self =>
    */
   def tryCompare(x: A, y: A): Option[Int] = {
     val c = partialCompare(x, y)
-    if (isNaN(c)) None else Some(c.signum)
+    if (isNaN(c)) None else Some(c.sign.toInt)
   }
 
   // The following may be overridden for performance:
