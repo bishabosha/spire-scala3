@@ -6,15 +6,15 @@ erased def erasedTag[T]: Tag[T] = erasedValue[Tag[T]]
 
 enum Tag[A] {
 
-  case UnitTag    extends Tag[Unit]
-  case BooleanTag extends Tag[Boolean]
-  case ByteTag    extends Tag[Byte]
-  case ShortTag   extends Tag[Short]
-  case IntTag     extends Tag[Int]
-  case LongTag    extends Tag[Long]
-  case FloatTag   extends Tag[Float]
-  case DoubleTag  extends Tag[Double]
-  case AnyTag[A]  extends Tag[A]
+  case UnitTag     extends Tag[Unit]
+  case BooleanTag  extends Tag[Boolean]
+  case ByteTag     extends Tag[Byte]
+  case ShortTag    extends Tag[Short]
+  case IntTag      extends Tag[Int]
+  case LongTag     extends Tag[Long]
+  case FloatTag    extends Tag[Float]
+  case DoubleTag   extends Tag[Double]
+  case AnyTag[A]() extends Tag[A]
 
   def render[T]: String = this match {
     case UnitTag    => "Unit"
