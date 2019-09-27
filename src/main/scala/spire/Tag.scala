@@ -31,16 +31,16 @@ enum Tag[A] {
 
 object Tag {
 
-  given as Tag[Unit]    = UnitTag
-  given as Tag[Boolean] = BooleanTag
-  given as Tag[Byte]    = ByteTag
-  given as Tag[Short]   = ShortTag
-  given as Tag[Int]     = IntTag
-  given as Tag[Long]    = LongTag
-  given as Tag[Float]   = FloatTag
-  given as Tag[Double]  = DoubleTag
-  given [A] as Tag[A]   = AnyTag()
+  given Tag[Unit]    = UnitTag
+  given Tag[Boolean] = BooleanTag
+  given Tag[Byte]    = ByteTag
+  given Tag[Short]   = ShortTag
+  given Tag[Int]     = IntTag
+  given Tag[Long]    = LongTag
+  given Tag[Float]   = FloatTag
+  given Tag[Double]  = DoubleTag
+  given [A]: Tag[A]  = AnyTag()
 
-  inline def apply[T: Tag] = the[Tag[T]]
+  inline def apply[T: Tag] = summon[Tag[T]]
 
 }

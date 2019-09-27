@@ -12,7 +12,7 @@ type CRig[T] <: CRigs.CRig[?] = T match {
 }
 
 object CRig {
-  inline given [T] as CRig[T.Param] given (T: CRig[T]) = T.asInstanceOf
+  inline given [T](given T: CRig[T]): CRig[T.Param] = T.asInstanceOf
 }
 
 object CRigs {

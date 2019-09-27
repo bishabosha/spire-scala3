@@ -12,7 +12,7 @@ type Semigroup[T] <: Semigroups.Semigroup[?] = T match {
 }
 
 object Semigroup {
-  inline given [T] as Semigroup[T.Param] given (T: Semigroup[T]) = T.asInstanceOf
+  inline given [T](given T: Semigroup[T]): Semigroup[T.Param] = T.asInstanceOf
 }
 
 object Semigroups {
