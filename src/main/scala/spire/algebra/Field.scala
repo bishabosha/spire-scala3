@@ -17,14 +17,14 @@ trait Field[@sp(Int, Long, Float, Double) A] extends CRing[A] { self =>
 
 trait FieldFunctions[F[T] <: Field[T]] extends CRingFunctions[F] {
 
-  def reciprocal[@sp(Int, Long, Float, Double) A](x: A) given (ev: F[A]): A =
+  def reciprocal[@sp(Int, Long, Float, Double) A](x: A) (given ev: F[A]): A =
     ev.reciprocal(x)
 
-  def div[@sp(Int, Long, Float, Double) A](x: A, y: A) given (ev: F[A]): A =
+  def div[@sp(Int, Long, Float, Double) A](x: A, y: A) (given ev: F[A]): A =
     ev.div(x, y)
 
 }
 
 object Field extends FieldFunctions[Field] {
-  inline def apply[A] given Field[A]: Field[A] = the[Field[A]]
+  inline def apply[A] (given Field[A]) = summon[Field[A]]
 }

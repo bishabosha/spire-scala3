@@ -3,7 +3,7 @@ package spire.syntax.macros
 import language.implicitConversions
 
 import quoted._
-import given quoted.autolift._
+import quoted.autolift.given
 import quoted.matching._
 import collection.immutable.NumericRange
 
@@ -18,7 +18,7 @@ inline def cforInline[R](init: => R, test: => R => Boolean, next: => R => R, bod
 }
 
 def cforRangeMacroGen[R <: RangeLike : Type](r: Expr[R], body: Expr[RangeElem[R] => Unit])
-    given (qctx: QuoteContext): Expr[Unit] = {
+    (given qctx: QuoteContext): Expr[Unit] = {
   import qctx._
   import tasty.{error => _,_}
 
@@ -31,7 +31,7 @@ def cforRangeMacroGen[R <: RangeLike : Type](r: Expr[R], body: Expr[RangeElem[R]
   }
 }
 
-def cforRangeMacroLong(r: Expr[NumericRange[Long]], body: Expr[Long => Unit]) given (qctx: QuoteContext): Expr[Unit] = {
+def cforRangeMacroLong(r: Expr[NumericRange[Long]], body: Expr[Long => Unit]) (given qctx: QuoteContext): Expr[Unit] = {
   import qctx._
 
   def strideUpUntil(fromExpr: Expr[Long], untilExpr: Expr[Long], stride: Expr[Long]): Expr[Unit] = '{
@@ -102,7 +102,7 @@ def cforRangeMacroLong(r: Expr[NumericRange[Long]], body: Expr[Long => Unit]) gi
   }
 }
 
-def cforRangeMacro(r: Expr[Range], body: Expr[Int => Unit]) given (qctx: QuoteContext): Expr[Unit] = {
+def cforRangeMacro(r: Expr[Range], body: Expr[Int => Unit]) (given qctx: QuoteContext): Expr[Unit] = {
   import qctx._
   
   def strideUpUntil(fromExpr: Expr[Int], untilExpr: Expr[Int], stride: Expr[Int]): Expr[Unit] = '{
