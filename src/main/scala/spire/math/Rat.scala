@@ -89,7 +89,7 @@ object Rat {
 
   def unapply(r: Rat): Some[(BigInt, BigInt)] = Some((r.num, r.den))
 
-  given ratAlgebra as RatAlgebra = RatAlgebra()
+  given ratAlgebra: RatAlgebra = RatAlgebra()
 }
 
 class RatAlgebra extends Field[Rat] with Order[Rat] with Serializable {

@@ -22,7 +22,7 @@ object ULong {
     if (n < 0) throw new IllegalArgumentException(s"$n < 0")
     else new ULong(n.toLong)
 
-  given ulongToBigInt as Conversion[ULong, BigInt] = _.toBigInt
+  given ulongToBigInt: Conversion[ULong, BigInt] = _.toBigInt
 
   @inline final val MinValue = ULong(0L)
   @inline final val MaxValue = ULong(-1L)

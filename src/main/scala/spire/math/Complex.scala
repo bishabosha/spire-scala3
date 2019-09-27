@@ -3,8 +3,8 @@ package math
 
 import spire.algebra._
 
-import given spire.syntax.field._
-import given spire.syntax.order._
+import spire.syntax.field.given
+import spire.syntax.order.given
 
 
 object Complex {

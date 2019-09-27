@@ -4,14 +4,14 @@ package syntax
 import spire.algebra._
 
 trait EqSyntax {
-  given eqSyntax [A:Eq] {
-    inline def (lhs:A) === [B] (rhs: B) given (ev1: B =:= A): Boolean = Eq[A].eqv(lhs, ev1(rhs))
-    inline def (lhs:A) =!= [B] (rhs: B) given (ev1: B =:= A): Boolean = Eq[A].neqv(lhs, ev1(rhs))
+  given eqSyntax[A:Eq]: {
+    inline def (lhs:A) === [B] (rhs: B) (given ev1: B =:= A): Boolean = Eq[A].eqv(lhs, ev1(rhs))
+    inline def (lhs:A) =!= [B] (rhs: B) (given ev1: B =:= A): Boolean = Eq[A].neqv(lhs, ev1(rhs))
   }
 }
 
 trait PartialOrderSyntax extends EqSyntax {
-  given partialorderSyntax [A:PartialOrder] {
+  given partialorderSyntax[A:PartialOrder]: {
     inline def (lhs: A) >  (rhs: A): Boolean = PartialOrder[A].gt(lhs, rhs)
     inline def (lhs: A) >= (rhs: A): Boolean = PartialOrder[A].gteqv(lhs, rhs)
     inline def (lhs: A) <  (rhs: A): Boolean = PartialOrder[A].lt(lhs, rhs)
@@ -23,29 +23,29 @@ trait PartialOrderSyntax extends EqSyntax {
 }
 
 trait OrderSyntax extends PartialOrderSyntax {
-  given orderSyntax [A:Order] {
+  given orderSyntax[A:Order]: {
     inline def (lhs: A) compare(rhs: A): Int = Order[A].compare(lhs, rhs)
   }
 }
 
 trait CRigSyntax {
-  given crigSyntax [A:CRig] {
+  given crigSyntax[A:CRig]: {
     inline def (lhs: A) +      (rhs: A)   : A       = CRig[A].plus(lhs, rhs)
-    inline def (lhs: A) isZero given Eq[A]: Boolean = CRig[A].isZero(lhs)
+    inline def (lhs: A) isZero (given Eq[A]): Boolean = CRig[A].isZero(lhs)
     inline def (lhs: A) *      (rhs: A)   : A       = CRig[A].times(lhs, rhs)
-    inline def (lhs: A) isOne  given Eq[A]: Boolean = CRig[A].isOne(lhs)
+    inline def (lhs: A) isOne  (given Eq[A]): Boolean = CRig[A].isOne(lhs)
   }
 }
 
 trait CRingSyntax extends CRigSyntax {
-  given cringSyntax [A:CRing] {
+  given cringSyntax[A:CRing]: {
     inline def (lhs: A) unary_-   : A = CRing[A].negate(lhs)
     inline def (lhs: A) - (rhs: A): A = CRing[A].minus(lhs, rhs)
   }
 }
 
 trait FieldSyntax extends CRingSyntax {
-  given fieldSyntax [A:Field] {
+  given fieldSyntax[A:Field]: {
     inline def (lhs: A) reciprocal(): A = Field[A].reciprocal(lhs)
     inline def (lhs: A) / (rhs: A)  : A = Field[A].div(lhs, rhs)
   }
