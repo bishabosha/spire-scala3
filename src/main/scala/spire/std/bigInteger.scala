@@ -28,6 +28,7 @@ final class BigIntegerAlgebra extends Order[BigInteger] with CRing[BigInteger] {
   def zero: BigInteger = BigInteger.ZERO
 
   override def fromInt(n: Int): BigInteger = BigInteger.valueOf(n)
+  override def fromBigInt(n: BigInt): BigInteger = n.underlying
 }
 
 trait BigIntegerInstances {

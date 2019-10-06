@@ -29,6 +29,10 @@ class BigDecimalAlgebra extends Order[BigDecimal] with Field[BigDecimal] {
   val zero: BigDecimal = BigDecimal(0.0)
 
   override def fromInt(n: Int): BigDecimal = BigDecimal(n)
+  override def fromBigInt(n: BigInt): BigDecimal = BigDecimal(n)
+  override def fromDouble(n: Double): BigDecimal = BigDecimal(n)
+  override def fromBigDecimal(n: BigDecimal): BigDecimal = n
+
   def div(a: BigDecimal, b: BigDecimal): BigDecimal = a / b
 
 }
