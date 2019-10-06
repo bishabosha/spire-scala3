@@ -17,6 +17,7 @@ final class DoubleAlgebra extends Order[Double] with Field[Double] {
   def zero: Double = 0.0
 
   override def fromInt(n: Int): Double = n
+  override def fromDouble(n: Double): Double = n
 
   def div(a:Double, b:Double): Double = a / b
 

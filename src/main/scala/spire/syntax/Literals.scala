@@ -11,4 +11,10 @@ object primitives {
     case n => ev.fromInt(n)
   }
 
+  inline def (n: Double) as [A] (given ev: Field[A]): A = inline n match {
+    case 0 => ev.zero
+    case 1 => ev.one
+    case n => ev.fromDouble(n)
+  }
+
 }

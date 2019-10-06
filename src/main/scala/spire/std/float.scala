@@ -26,6 +26,7 @@ final class FloatAlgebra extends Order[Float] with Field[Float] {
   def zero: Float = 0.0F
 
   override def fromInt(n: Int): Float = n
+  override def fromDouble(n: Double): Float = n.toFloat
 
   def div(a:Float, b:Float): Float = a / b
 
