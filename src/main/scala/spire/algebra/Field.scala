@@ -30,11 +30,14 @@ trait Field[@sp(Int, Long, Float, Double) A] extends CRing[A] { self =>
   }
 
   def fromBigDecimal(n: BigDecimal): A = {
-    val quot     = fromBigInt(n.quot(Field.one).toBigInt)
-    val remRaw   = n.remainder(Field.one)
-    val unscaled = fromBigInt(remRaw.underlying.unscaledValue)
-    val scalePow = fromBigInt(JBigDecimal(scala.math.pow(10.0, remRaw.scale.toDouble)).toBigInteger)
-    plus(quot, div(unscaled, scalePow))
+    val quot = fromBigInt(n.quot(Field.one).toBigInt)
+    if n.isWhole then
+      quot
+    else
+      val remRaw   = n.remainder(Field.one)
+      val unscaled = fromBigInt(remRaw.underlying.unscaledValue)
+      val scalePow = fromBigInt(JBigDecimal(scala.math.pow(10.0, remRaw.scale.toDouble)).toBigInteger)
+      plus(quot, div(unscaled, scalePow))
   }
 
 }
@@ -51,6 +54,5 @@ trait FieldFunctions[F[T] <: Field[T]] extends CRingFunctions[F] {
 
 object Field extends FieldFunctions[Field] {
   private val one: BigDecimal = 1
-  private val two: BigDecimal = 2
   inline def apply[A] (given Field[A]) = summon[Field[A]]
 }
