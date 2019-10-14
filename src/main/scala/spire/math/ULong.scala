@@ -1,7 +1,4 @@
-package spire
-package math
-
-import language.implicitConversions
+package spire.math
 
 import spire.algebra.{CRig, Order}
 import java.lang.Math
@@ -9,7 +6,26 @@ import scala.annotation.tailrec
 
 object ULong {
 
-  implicit val algebra: Order[ULong] with CRig[ULong] = new ULongAlgebra
+  given Order[ULong], CRig[ULong] {
+
+    // Order
+
+    def compare(x: ULong, y: ULong): Int = if (x < y) -1 else if (x > y) 1 else 0
+    override def eqv(x:ULong, y:ULong): Boolean = x == y
+    override def neqv(x:ULong, y:ULong): Boolean = x != y
+    override def gt(x: ULong, y: ULong): Boolean = x > y
+    override def gteqv(x: ULong, y: ULong): Boolean = x >= y
+    override def lt(x: ULong, y: ULong): Boolean = x < y
+    override def lteqv(x: ULong, y: ULong): Boolean = x <= y
+
+    // CRig
+
+    def one: ULong = ULong(1)
+    def plus(a:ULong, b:ULong): ULong = a + b
+    override def times(a:ULong, b:ULong): ULong = a * b
+    def zero: ULong = ULong(0)
+
+  }
 
   inline def apply(n: Long): ULong = new ULong(n)
 
@@ -103,7 +119,7 @@ class ULong(val signed: Long) extends AnyVal {
     if (d == 0) {
       throw new java.lang.ArithmeticException("/ by zero")
     } else if (d < 0) {
-      ULong(if (n >= 0 || n < d) 0 else 1)
+      ULong(if (n >= 0 || n < d) 0L else 1L)
     } else if (n >= 0) {
       ULong(n / d)
     } else {
@@ -135,24 +151,4 @@ class ULong(val signed: Long) extends AnyVal {
   final def ** (that: ULong): ULong = ULong.pow(1L, this.signed, that.signed)
 
   final def gcd (that: ULong): ULong = ULong.gcd(this, that)
-}
-
-final class ULongAlgebra extends Order[ULong] with CRig[ULong] {
-
-  // Order
-
-  def compare(x: ULong, y: ULong): Int = if (x < y) -1 else if (x > y) 1 else 0
-  override def eqv(x:ULong, y:ULong): Boolean = x == y
-  override def neqv(x:ULong, y:ULong): Boolean = x != y
-  override def gt(x: ULong, y: ULong): Boolean = x > y
-  override def gteqv(x: ULong, y: ULong): Boolean = x >= y
-  override def lt(x: ULong, y: ULong): Boolean = x < y
-  override def lteqv(x: ULong, y: ULong): Boolean = x <= y
-
-  // CRig
-
-  def one: ULong = ULong(1)
-  def plus(a:ULong, b:ULong): ULong = a + b
-  override def times(a:ULong, b:ULong): ULong = a * b
-  def zero: ULong = ULong(0)
 }

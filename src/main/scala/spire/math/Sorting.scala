@@ -1,8 +1,4 @@
-package spire
-package math
-
-
-import scala.language.implicitConversions
+package spire.math
 
 import spire.algebra.Order
 import spire.syntax.order.given
@@ -29,7 +25,7 @@ object InsertionSort extends Sort {
     * @param data the array to be sorted
     * @tparam A a member of the type class `Order`
     */
-  final def sort[@specialized A:Order:ClassTag](data:Array[A]): Unit =
+  final def sort[@specialized A: Order: ClassTag](data: Array[A]): Unit =
     sort(data, 0, data.length)
 
   /**
@@ -41,7 +37,7 @@ object InsertionSort extends Sort {
     * @param end the index of the last element, exclusive, to be sorted
     * @tparam A a member of the type class `Order`
     */
-  final def sort[@specialized A](data:Array[A], start:Int, end:Int)(implicit o:Order[A], ct:ClassTag[A]): Unit = {
+  final def sort[@specialized A: Order: ClassTag](data: Array[A], start: Int, end: Int): Unit = {
     require(start <= end && start >= 0 && end <= data.length)
     var i = start + 1
     while (i < end) {
@@ -73,7 +69,7 @@ object QuickSort {
     * @param data the array to be sorted
     * @tparam A a member of the type class `Order`
     */
-  final def sort[@specialized A:Order:ClassTag](data:Array[A]): Unit = qsort(data, 0, data.length)
+  final def sort[@specialized A: Order: ClassTag](data: Array[A]): Unit = qsort(data, 0, data.length)
 
   /**
     * Uses quicksort on `data` to sort the entries from the index `start`
@@ -87,7 +83,7 @@ object QuickSort {
     * @param end the index at which to stop sorting (exclusive)
     * @tparam A a member of the type class `Order`
     */
-  final def qsort[@specialized A](data:Array[A], start: Int, end: Int)(implicit o:Order[A], ct:ClassTag[A]): Unit = {
+  final def qsort[@specialized A: Order: ClassTag](data: Array[A], start: Int, end: Int): Unit = {
     require(start >= 0 && end <= data.length)
     if (end - start < limit) {
       InsertionSort.sort(data, start, end)
@@ -112,7 +108,7 @@ object QuickSort {
     * @tparam A a member of the type class Order
     * @return the next pivot value
     */
-  final def partition[@specialized A](data:Array[A], start:Int, end:Int, pivotIndex:Int)(implicit o:Order[A], ct:ClassTag[A]): Int = {
+  final def partition[@specialized A: Order: ClassTag](data: Array[A], start: Int, end: Int, pivotIndex: Int): Int = {
     require(start >= 0 && pivotIndex >= start && end > pivotIndex && end <= data.length)
     val pivotValue = data(pivotIndex)
 
@@ -148,11 +144,11 @@ object QuickSort {
  */
 object Sorting {
   /** Delegates to [[spire.math.QuickSort.sort]] */
-  final def sort[@specialized A:Order:ClassTag](data:Array[A]): Unit = QuickSort.sort(data)
+  final def sort[@specialized A: Order: ClassTag](data: Array[A]): Unit = QuickSort.sort(data)
 
   /** Delegates to [[spire.math.InsertionSort.sort]] */
-  final def insertionSort[@specialized A:Order:ClassTag](data:Array[A]): Unit = InsertionSort.sort(data)
+  final def insertionSort[@specialized A: Order: ClassTag](data: Array[A]): Unit = InsertionSort.sort(data)
 
   /** Delegates to [[spire.math.QuickSort.sort]] */
-  final def quickSort[@specialized A:Order:ClassTag](data:Array[A]): Unit = QuickSort.sort(data)
+  final def quickSort[@specialized A: Order: ClassTag](data: Array[A]): Unit = QuickSort.sort(data)
 }

@@ -1,9 +1,6 @@
 package spire.syntax.macros
 
-import language.implicitConversions
-
 import quoted._
-import quoted.autolift.given
 import quoted.matching._
 import collection.immutable.NumericRange
 
@@ -17,8 +14,7 @@ inline def cforInline[R](init: => R, test: => R => Boolean, next: => R => R, bod
   }
 }
 
-def cforRangeMacroGen[R <: RangeLike : Type](r: Expr[R], body: Expr[RangeElem[R] => Unit])
-    (given qctx: QuoteContext): Expr[Unit] = {
+def cforRangeMacroGen[R <: RangeLike : Type](r: Expr[R], body: Expr[RangeElem[R] => Unit])(given qctx: QuoteContext): Expr[Unit] = {
   import qctx._
   import tasty.{error => _,_}
 
@@ -31,7 +27,7 @@ def cforRangeMacroGen[R <: RangeLike : Type](r: Expr[R], body: Expr[RangeElem[R]
   }
 }
 
-def cforRangeMacroLong(r: Expr[NumericRange[Long]], body: Expr[Long => Unit]) (given qctx: QuoteContext): Expr[Unit] = {
+def cforRangeMacroLong(r: Expr[NumericRange[Long]], body: Expr[Long => Unit])(given qctx: QuoteContext): Expr[Unit] = {
   import qctx._
 
   def strideUpUntil(fromExpr: Expr[Long], untilExpr: Expr[Long], stride: Expr[Long]): Expr[Unit] = '{
@@ -71,13 +67,13 @@ def cforRangeMacroLong(r: Expr[NumericRange[Long]], body: Expr[Long => Unit]) (g
   }
 
   r match {
-    case '{ ($i: Long) until $j } => strideUpUntil(i,j,1L)
-    case '{ ($i: Long) to $j }    => strideUpTo(i,j,1L)
+    case '{ ($i: Long) until $j } => strideUpUntil(i,j,Expr(1L))
+    case '{ ($i: Long) to $j }    => strideUpTo(i,j,Expr(1L))
 
     case '{ ($i: Long) until $j by $step } =>
       step match {
-        case Const(k) if k  > 0 => strideUpUntil(i,j,k)
-        case Const(k) if k  < 0 => strideDownUntil(i,j,-k)
+        case Const(k) if k  > 0 => strideUpUntil(i,j,Expr(k))
+        case Const(k) if k  < 0 => strideDownUntil(i,j,Expr(-k))
         case Const(k) if k == 0 => error("zero stride", step); '{}
 
         case _ =>
@@ -87,8 +83,8 @@ def cforRangeMacroLong(r: Expr[NumericRange[Long]], body: Expr[Long => Unit]) (g
 
     case '{ ($i: Long) to $j by $step } =>
       step match {
-        case Const(k) if k  > 0 => strideUpTo(i,j,k)
-        case Const(k) if k  < 0 => strideDownTo(i,j,-k)
+        case Const(k) if k  > 0 => strideUpTo(i,j,Expr(k))
+        case Const(k) if k  < 0 => strideDownTo(i,j,Expr(-k))
         case Const(k) if k == 0 => error("zero stride", step); '{}
 
         case _ =>
@@ -102,9 +98,9 @@ def cforRangeMacroLong(r: Expr[NumericRange[Long]], body: Expr[Long => Unit]) (g
   }
 }
 
-def cforRangeMacro(r: Expr[Range], body: Expr[Int => Unit]) (given qctx: QuoteContext): Expr[Unit] = {
+def cforRangeMacro(r: Expr[Range], body: Expr[Int => Unit])(given qctx: QuoteContext): Expr[Unit] = {
   import qctx._
-  
+
   def strideUpUntil(fromExpr: Expr[Int], untilExpr: Expr[Int], stride: Expr[Int]): Expr[Unit] = '{
     var index = $fromExpr
     val limit = $untilExpr
@@ -142,13 +138,13 @@ def cforRangeMacro(r: Expr[Range], body: Expr[Int => Unit]) (given qctx: QuoteCo
   }
 
   r match {
-    case '{ ($i: Int) until $j } => strideUpUntil(i,j,1)
-    case '{ ($i: Int) to $j }    => strideUpTo(i,j,1)
+    case '{ ($i: Int) until $j } => strideUpUntil(i,j,Expr(1))
+    case '{ ($i: Int) to $j }    => strideUpTo(i,j,Expr(1))
 
     case '{ ($i: Int) until $j by $step } =>
       step match {
-        case Const(k) if k  > 0 => strideUpUntil(i,j,k)
-        case Const(k) if k  < 0 => strideDownUntil(i,j,-k)
+        case Const(k) if k  > 0 => strideUpUntil(i,j,Expr(k))
+        case Const(k) if k  < 0 => strideDownUntil(i,j,Expr(-k))
         case Const(k) if k == 0 => error("zero stride", step); '{}
 
         case _ =>
@@ -158,8 +154,8 @@ def cforRangeMacro(r: Expr[Range], body: Expr[Int => Unit]) (given qctx: QuoteCo
 
     case '{ ($i: Int) to $j by $step } =>
       step match {
-        case Const(k) if k  > 0 => strideUpTo(i,j,k)
-        case Const(k) if k  < 0 => strideDownTo(i,j,-k)
+        case Const(k) if k  > 0 => strideUpTo(i,j,Expr(k))
+        case Const(k) if k  < 0 => strideDownTo(i,j,Expr(-k))
         case Const(k) if k == 0 => error("zero stride", step); '{}
 
         case _ =>
