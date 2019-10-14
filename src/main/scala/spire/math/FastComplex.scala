@@ -1,9 +1,4 @@
-package spire
-package math
-
-import language.implicitConversions
-
-import java.lang.Math
+package spire.math
 
 object FloatComplex {
   import FastComplex.{encode}
@@ -54,7 +49,7 @@ class FloatComplex(val u: Long) extends AnyVal {
   * Since we're overloading the meaning of Long, all the operations have to be
   * defined on the FastComplex object, meaning the syntax for using this is a
   * bit ugly. To add to the ugly beauty of the whole thing I could imagine
-  * defining implicit operators on Long like +@, -@, *@, /@, etc.
+  * defining operators on Long like +@, -@, *@, /@, etc.
   *
   * You might wonder why it's even worth doing this. The answer is that when
   * you need to allocate an array of e.g. 10-20 million complex numbers, the GC
@@ -119,7 +114,7 @@ object FastComplex {
   // get the complex sign of the complex number
   final def complexSignum(d: Long): Long = {
     val m = Math.abs(d)
-    if (m == 0.0F) zero else divide(d, encode(m, 0.0F))
+    if (m == 0.0F) zero else divide(d, encode(m.toFloat, 0.0F))
   }
 
   // negation
@@ -150,18 +145,16 @@ object FastComplex {
     val abs_re_b = Math.abs(re_b)
     val abs_im_b = Math.abs(im_b)
 
-    if (abs_re_b >= abs_im_b) {
+    if (abs_re_b >= abs_im_b)
       if (abs_re_b == 0.0F) throw new ArithmeticException("/0")
       val ratio = im_b / re_b
       val denom = re_b + im_b * ratio
       encode((re_a + im_a * ratio) / denom, (im_a - re_a * ratio) / denom)
-
-    } else {
+    else
       if (abs_im_b == 0.0F) throw new ArithmeticException("/0")
       val ratio = re_b / im_b
       val denom = re_b * ratio + im_b
       encode((re_a * ratio + im_a) / denom, (im_a * ratio - re_a) / denom)
-    }
   }
 
 }

@@ -65,20 +65,20 @@ trait CRing[@sp(Int, Long, Float, Double) A] extends CRig[A] {
 
 trait CRingFunctions[C[T] <: CRing[T]] extends CRigFunctions[C] {
 
-  def negate[@sp(Int, Long, Float, Double) A](x: A) (given ev: C[A]): A =
+  def negate[@sp(Int, Long, Float, Double) A](x: A)(given ev: C[A]): A =
     ev.negate(x)
 
-  def minus[@sp(Int, Long, Float, Double) A](x: A, y: A) (given ev: C[A]): A =
+  def minus[@sp(Int, Long, Float, Double) A](x: A, y: A)(given ev: C[A]): A =
     ev.minus(x, y)
 
-  def fromInt[@sp(Int, Long, Float, Double) A](n: Int) (given ev: C[A]): A =
+  def fromInt[@sp(Int, Long, Float, Double) A](n: Int)(given ev: C[A]): A =
     ev.fromInt(n)
 
-  def fromBigInt[@sp(Int, Long, Float, Double) A](n: BigInt) (given ev: C[A]): A =
+  def fromBigInt[@sp(Int, Long, Float, Double) A](n: BigInt)(given ev: C[A]): A =
     ev.fromBigInt(n)
 
 }
 
 object CRing extends CRingFunctions[CRing] {
-  inline def apply[A] (given CRing[A]) = summon[CRing[A]]
+  inline def apply[A](given CRing[A]) = summon[CRing[A]]
 }

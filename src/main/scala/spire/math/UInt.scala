@@ -1,15 +1,31 @@
-package spire
-package math
-
-import language.implicitConversions
+package spire.math
 
 import spire.algebra.{CRig, Order}
 
 object UInt {
 
-  implicit final val algebra: Order[UInt] with CRig[UInt] = UIntAlgebra()
+  given Order[UInt], CRig[UInt] {
 
-  final def apply(n: Long): UInt = UInt(summon[Numeric[Long]].toLong(n))
+    // Order
+
+    def compare(x: UInt, y: UInt): Int = if (x < y) -1 else if (x > y) 1 else 0
+    override def eqv(x:UInt, y:UInt): Boolean = x == y
+    override def neqv(x:UInt, y:UInt): Boolean = x != y
+    override def gt(x: UInt, y: UInt): Boolean = x > y
+    override def gteqv(x: UInt, y: UInt): Boolean = x >= y
+    override def lt(x: UInt, y: UInt): Boolean = x < y
+    override def lteqv(x: UInt, y: UInt): Boolean = x <= y
+
+    // CRig
+
+    def one: UInt = UInt(1)
+    def plus(a:UInt, b:UInt): UInt = a + b
+    override def times(a:UInt, b:UInt): UInt = a * b
+    def zero: UInt = UInt(0)
+
+  }
+
+  private inline def fromLong(l: Long): UInt = UInt(l.toInt)
 
   @inline final val MinValue: UInt = UInt(0)
   @inline final val MaxValue: UInt = UInt(-1)
@@ -49,8 +65,8 @@ class UInt(val signed: Int) extends AnyVal {
   def + (that: UInt): UInt = UInt(this.signed + that.signed)
   def - (that: UInt): UInt = UInt(this.signed - that.signed)
   def * (that: UInt): UInt = UInt(this.signed * that.signed)
-  def / (that: UInt): UInt = UInt(this.toLong / that.toLong)
-  def % (that: UInt): UInt = UInt(this.toLong % that.toLong)
+  def / (that: UInt): UInt = UInt.fromLong(this.toLong / that.toLong)
+  def % (that: UInt): UInt = UInt.fromLong(this.toLong % that.toLong)
 
   def unary_~ : UInt = UInt(~this.signed)
 
@@ -60,25 +76,4 @@ class UInt(val signed: Int) extends AnyVal {
   def & (that: UInt): UInt = UInt(this.signed & that.signed)
   def | (that: UInt): UInt = UInt(this.signed | that.signed)
   def ^ (that: UInt): UInt = UInt(this.signed ^ that.signed)
-}
-
-final class UIntAlgebra extends Order[UInt] with CRig[UInt] {
-
-  // Order
-
-  def compare(x: UInt, y: UInt): Int = if (x < y) -1 else if (x > y) 1 else 0
-  override def eqv(x:UInt, y:UInt): Boolean = x == y
-  override def neqv(x:UInt, y:UInt): Boolean = x != y
-  override def gt(x: UInt, y: UInt): Boolean = x > y
-  override def gteqv(x: UInt, y: UInt): Boolean = x >= y
-  override def lt(x: UInt, y: UInt): Boolean = x < y
-  override def lteqv(x: UInt, y: UInt): Boolean = x <= y
-
-  // CRig
-
-  def one: UInt = UInt(1)
-  def plus(a:UInt, b:UInt): UInt = a + b
-  override def times(a:UInt, b:UInt): UInt = a * b
-  def zero: UInt = UInt(0)
-
 }

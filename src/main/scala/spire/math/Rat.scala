@@ -2,7 +2,7 @@ package spire.math
 
 import spire.algebra._
 
-class Rat(val num: BigInt, val den: BigInt) extends Serializable { lhs =>
+final class Rat(val num: BigInt, val den: BigInt) extends Serializable { lhs =>
 
   override def toString: String =
     if (den == 1) s"$num" else s"$num/$den"
@@ -20,7 +20,7 @@ class Rat(val num: BigInt, val den: BigInt) extends Serializable { lhs =>
   def isOne: Boolean = num == 1 && den == 1
 
   def compare(rhs: Rat): Int =
-    (lhs.num * rhs.den) compare (rhs.num * lhs.den)
+    (lhs.num * rhs.den) `compare` (rhs.num * lhs.den)
 
   def abs(): Rat = Rat(num.abs, den)
 
@@ -37,7 +37,7 @@ class Rat(val num: BigInt, val den: BigInt) extends Serializable { lhs =>
 
   def /~(rhs: Rat) = lhs / rhs
 
-  def %(rhs: Rat) = Rat.Zero
+  def %(rhs: Rat) = Rat.zero
 
   def reciprocal: Rat =
     if (num == 0) throw new ArithmeticException("/0") else Rat(den, num)
@@ -70,10 +70,8 @@ class Rat(val num: BigInt, val den: BigInt) extends Serializable { lhs =>
 
 object Rat {
 
-  val MinusOne: Rat = Rat(-1)
-  val Zero: Rat = Rat(0)
-  val One: Rat = Rat(1)
-  val Two: Rat = Rat(2)
+  val zero: Rat = Rat(0)
+  val one: Rat  = Rat(1)
 
   def apply(n: BigInt): Rat =
     Rat(n, 1)
@@ -83,33 +81,28 @@ object Rat {
     else if (den < 0) apply(-num, -den)
     else if (num == 0) new Rat(0, 1)
     else {
-      val g = num gcd den
+      val g = num `gcd` den
       new Rat(num / g, den / g)
     }
 
-  def unapply(r: Rat): Some[(BigInt, BigInt)] = Some((r.num, r.den))
+  def unapply(r: Rat): (BigInt, BigInt) = (r.num, r.den)
 
-  given ratAlgebra: RatAlgebra = RatAlgebra()
-}
+  given Order[Rat], Field[Rat] {
 
-class RatAlgebra extends Field[Rat] with Order[Rat] with Serializable {
+    def compare(x: Rat, y: Rat): Int = x `compare` y
 
-  def compare(x: Rat, y: Rat): Int = x compare y
+    val zero: Rat = Rat.zero
+    val one: Rat = Rat.one
 
-  val zero: Rat = Rat.Zero
-  val one: Rat = Rat.One
+    def plus(a: Rat, b: Rat): Rat = a + b
+    def negate(a: Rat): Rat = -a
+    def times(a: Rat, b: Rat): Rat = a * b
+    override def reciprocal(a: Rat): Rat = a.reciprocal
+    def div(a: Rat, b: Rat): Rat = a / b
 
-  def plus(a: Rat, b: Rat): Rat = a + b
-  def negate(a: Rat): Rat = -a
-  def times(a: Rat, b: Rat): Rat = a * b
-  override def reciprocal(a: Rat): Rat = a.reciprocal
-  def div(a: Rat, b: Rat): Rat = a / b
+    override def fromInt(n: Int): Rat = Rat(n)
+    override def fromBigInt(n: BigInt): Rat = Rat(n)
 
-  override def fromInt(n: Int): Rat = Rat(n)
-  override def fromBigInt(n: BigInt): Rat = Rat(n)
+  }
 
-  def isWhole(a: Rat): Boolean = a.isWhole
-  def ceil(a: Rat): Rat = a.ceil
-  def floor(a: Rat): Rat = a .floor
-  def round(a: Rat): Rat = a. round
 }
