@@ -1,16 +1,9 @@
 dumps
 
-eec/cp
-eec/gnotes
-
 *.log
-*.bc
 *.o
 *.out
-*.tokens
-*.interp
 src_managed
-eec_*
 *.sc
 
 *.DS_Store
