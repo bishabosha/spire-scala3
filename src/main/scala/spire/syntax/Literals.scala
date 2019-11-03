@@ -19,7 +19,7 @@ object literals {
       ${ fromFieldImpl('digits, 'ev) }
 
   private def fromRingImpl[A: Type](digits: Expr[String], radix: Expr[Int], A: Expr[CRing[A]])(given QuoteContext): Expr[A] =
-    digits -> radix match
+    (digits -> radix): @unchecked match
     case Const(ds) -> Const(r) => fromBigIntImpl(BigInt(ds, r), A)
     case _                     => '{ $A.fromBigInt(BigInt($digits, $radix)) }
 

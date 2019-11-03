@@ -16,7 +16,7 @@ inline def cforInline[R](init: => R, test: => R => Boolean, next: => R => R, bod
 
 def cforRangeMacroGen[R <: RangeLike : Type](r: Expr[R], body: Expr[RangeElem[R] => Unit])(given qctx: QuoteContext): Expr[Unit] = {
   import qctx._
-  import tasty.{error => _,_}
+  import tasty.{error => _,_, given}
 
   type RangeL = NumericRange[Long]
 
@@ -34,7 +34,7 @@ def cforRangeMacroLong(r: Expr[NumericRange[Long]], body: Expr[Long => Unit])(gi
     var index = $fromExpr
     val limit = $untilExpr
     while (index < limit) {
-      ${ body('index) }
+      ${ Expr.betaReduce(body)('index) }
       index += $stride
     }
   }
@@ -43,7 +43,7 @@ def cforRangeMacroLong(r: Expr[NumericRange[Long]], body: Expr[Long => Unit])(gi
     var index = $fromExpr
     val end   = $untilExpr
     while (index <= end) {
-      ${ body('index) }
+      ${ Expr.betaReduce(body)('index) }
       index += $stride
     }
   }
@@ -52,7 +52,7 @@ def cforRangeMacroLong(r: Expr[NumericRange[Long]], body: Expr[Long => Unit])(gi
     var index = $fromExpr
     val end   = $untilExpr
     while (index >= end) {
-      ${ body('index) }
+      ${ Expr.betaReduce(body)('index) }
       index -= $stride
     }
   }
@@ -61,7 +61,7 @@ def cforRangeMacroLong(r: Expr[NumericRange[Long]], body: Expr[Long => Unit])(gi
     var index = $fromExpr
     val limit = $untilExpr
     while (index > limit) {
-      ${ body('index) }
+      ${ Expr.betaReduce(body)('index) }
       index -= $stride
     }
   }
@@ -105,7 +105,7 @@ def cforRangeMacro(r: Expr[Range], body: Expr[Int => Unit])(given qctx: QuoteCon
     var index = $fromExpr
     val limit = $untilExpr
     while (index < limit) {
-      ${ body('index) }
+      ${ Expr.betaReduce(body)('index) }
       index += $stride
     }
   }
@@ -114,7 +114,7 @@ def cforRangeMacro(r: Expr[Range], body: Expr[Int => Unit])(given qctx: QuoteCon
     var index = $fromExpr
     val end   = $untilExpr
     while (index <= end) {
-      ${ body('index) }
+      ${ Expr.betaReduce(body)('index) }
       index += $stride
     }
   }
@@ -123,7 +123,7 @@ def cforRangeMacro(r: Expr[Range], body: Expr[Int => Unit])(given qctx: QuoteCon
     var index = $fromExpr
     val end   = $untilExpr
     while (index >= end) {
-      ${ body('index) }
+      ${ Expr.betaReduce(body)('index) }
       index -= $stride
     }
   }
@@ -132,7 +132,7 @@ def cforRangeMacro(r: Expr[Range], body: Expr[Int => Unit])(given qctx: QuoteCon
     var index = $fromExpr
     val limit = $untilExpr
     while (index > limit) {
-      ${ body('index) }
+      ${ Expr.betaReduce(body)('index) }
       index -= $stride
     }
   }
