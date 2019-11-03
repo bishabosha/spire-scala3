@@ -5,8 +5,8 @@ import spire.algebra._
 
 trait EqSyntax {
   given eqSyntax[A: Eq]: {
-    inline def (lhs: A) === [B] (rhs: B)(given ev1: B =:= A): Boolean = Eq[A].eqv(lhs, ev1(rhs))
-    inline def (lhs: A) =!= [B] (rhs: B)(given ev1: B =:= A): Boolean = Eq[A].neqv(lhs, ev1(rhs))
+    inline def [B](lhs: A) === (rhs: B)(given ev1: B =:= A): Boolean = Eq[A].eqv(lhs, ev1(rhs))
+    inline def [B](lhs: A) =!= (rhs: B)(given ev1: B =:= A): Boolean = Eq[A].neqv(lhs, ev1(rhs))
   }
 }
 
@@ -73,15 +73,14 @@ trait CforSyntax {
 
   /** Alias of [[cforRange]] as an infix method.
    */
-  inline def (r: => R) peek [R <: RangeLike](body: => RangeElem[R] => Unit): Unit =
+  inline def [R <: RangeLike](r: => R) peek(body: => RangeElem[R] => Unit): Unit =
     cforRange(r)(body)
 }
 
-trait AllSyntax extends
-  CforSyntax with
-  EqSyntax with
-  PartialOrderSyntax with
-  OrderSyntax with
-  CRigSyntax with
-  CRingSyntax with
-  FieldSyntax
+trait AllSyntax extends CforSyntax
+  with EqSyntax
+  with PartialOrderSyntax
+  with OrderSyntax
+  with CRigSyntax
+  with CRingSyntax
+  with FieldSyntax
