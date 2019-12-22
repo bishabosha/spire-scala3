@@ -9,6 +9,7 @@ lazy val root = project
     version := spireScala3Version,
 
     scalaVersion := dottyVersion,
+    scalacOptions += "-Yexplicit-nulls",
 
     libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % "test",
     libraryDependencies += ("org.scalacheck" %% "scalacheck" % "1.14.0" % Test).withDottyCompat(scalaVersion.value)

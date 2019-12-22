@@ -19,7 +19,7 @@ trait Field[@sp(Int, Long, Float, Double) A] extends CRing[A] { self =>
       if n.isValidInt then
         fromInt(n.toInt)
       else
-        fromBigInt(JBigDecimal(n).toBigInteger)
+        fromBigInt(JBigDecimal(n).toBigInteger.nn)
     else
       fromBigDecimal(BigDecimal(n))
 
@@ -29,8 +29,8 @@ trait Field[@sp(Int, Long, Float, Double) A] extends CRing[A] { self =>
       quot
     else
       val remRaw   = n.remainder(Field.one)
-      val unscaled = fromBigInt(remRaw.underlying.unscaledValue)
-      val scalePow = fromBigInt(JBigDecimal(scala.math.pow(10.0, remRaw.scale.toDouble)).toBigInteger)
+      val unscaled = fromBigInt(remRaw.underlying.unscaledValue.nn)
+      val scalePow = fromBigInt(JBigDecimal(scala.math.pow(10.0, remRaw.scale.toDouble)).toBigInteger.nn)
       plus(quot, div(unscaled, scalePow))
 
 }

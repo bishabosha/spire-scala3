@@ -9,7 +9,7 @@ import scala.reflect.ClassTag
  *  Interface for a sorting strategy object.
  */
 trait Sort extends Any {
-  def sort[@specialized A: Order: ClassTag](data:Array[A]): Unit
+  def sort[@specialized A: Order: ClassTag](data: Array[A]): Unit
 }
 
 /**

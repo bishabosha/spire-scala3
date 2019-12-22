@@ -20,14 +20,14 @@ trait BigIntegerInstances {
 
     // CRing
 
-    override def minus(a: BigInteger, b: BigInteger): BigInteger = a subtract b
-    def negate(a: BigInteger): BigInteger = a.negate
-    def one: BigInteger = BigInteger.ONE
-    def plus(a: BigInteger, b: BigInteger): BigInteger = a add b
-    override def times(a: BigInteger, b: BigInteger): BigInteger = a multiply b
-    def zero: BigInteger = BigInteger.ZERO
+    override def minus(a: BigInteger, b: BigInteger): BigInteger = (a subtract b).nn
+    def negate(a: BigInteger): BigInteger = a.negate.nn
+    def one: BigInteger = BigInteger.ONE.nn
+    def plus(a: BigInteger, b: BigInteger): BigInteger = (a add b).nn
+    override def times(a: BigInteger, b: BigInteger): BigInteger = (a multiply b).nn
+    def zero: BigInteger = BigInteger.ZERO.nn
 
-    override def fromInt(n: Int): BigInteger = BigInteger.valueOf(n.toLong)
+    override def fromInt(n: Int): BigInteger = BigInteger.valueOf(n.toLong).nn
     override def fromBigInt(n: BigInt): BigInteger = n.underlying
 
   }
