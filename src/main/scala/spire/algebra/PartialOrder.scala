@@ -91,6 +91,7 @@ abstract class PartialOrderFunctions[P[T] <: PartialOrder[T]] extends EqFunction
     ev.gteqv(x, y)
   def gt[@sp A](x: A, y: A)(given ev: P[A]): Boolean =
     ev.gt(x, y)
+
 }
 
 object PartialOrder extends PartialOrderFunctions[PartialOrder] {

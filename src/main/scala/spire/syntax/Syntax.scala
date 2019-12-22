@@ -3,64 +3,51 @@ package syntax
 
 import spire.algebra._
 
-trait EqSyntax {
-  given eqSyntax[A: Eq]: {
-    inline def [B](lhs: A) === (rhs: B)(given ev1: B =:= A): Boolean = Eq[A].eqv(lhs, ev1(rhs))
-    inline def [B](lhs: A) =!= (rhs: B)(given ev1: B =:= A): Boolean = Eq[A].neqv(lhs, ev1(rhs))
-  }
-}
+trait EqSyntax with
+  given EqSyntax: [A: Eq, B](lhs: A)(given ev1: B =:= A) extended with
+    inline def ===(rhs: B): Boolean = Eq[A].eqv(lhs, ev1(rhs))
+    inline def =!=(rhs: B): Boolean = Eq[A].neqv(lhs, ev1(rhs))
 
-trait PartialOrderSyntax extends EqSyntax {
-  given partialorderSyntax[A: PartialOrder]: {
-    inline def (lhs: A) >  (rhs: A): Boolean = PartialOrder[A].gt(lhs, rhs)
-    inline def (lhs: A) >= (rhs: A): Boolean = PartialOrder[A].gteqv(lhs, rhs)
-    inline def (lhs: A) <  (rhs: A): Boolean = PartialOrder[A].lt(lhs, rhs)
-    inline def (lhs: A) <= (rhs: A): Boolean = PartialOrder[A].lteqv(lhs, rhs)
+trait PartialOrderSyntax extends EqSyntax
+  given PartialOrderSyntax: [A: PartialOrder](lhs: A) extended with
+    inline def >(rhs: A): Boolean = PartialOrder[A].gt(lhs, rhs)
+    inline def >=(rhs: A): Boolean = PartialOrder[A].gteqv(lhs, rhs)
+    inline def <(rhs: A): Boolean = PartialOrder[A].lt(lhs, rhs)
+    inline def <=(rhs: A): Boolean = PartialOrder[A].lteqv(lhs, rhs)
 
-    inline def (lhs: A) partialCompare (rhs: A): Double      = PartialOrder[A].partialCompare(lhs, rhs)
-    inline def (lhs: A) tryCompare     (rhs: A): Option[Int] = PartialOrder[A].tryCompare(lhs, rhs)
-  }
-}
+    inline def partialCompare(rhs: A): Double = PartialOrder[A].partialCompare(lhs, rhs)
+    inline def tryCompare(rhs: A): Option[Int] = PartialOrder[A].tryCompare(lhs, rhs)
 
-trait OrderSyntax extends PartialOrderSyntax {
-  given orderSyntax[A: Order]: {
-    inline def (lhs: A) compare(rhs: A): Int = Order[A].compare(lhs, rhs)
-  }
-}
+trait OrderSyntax extends PartialOrderSyntax
+  given OrderSyntax: [A: Order](lhs: A) extended with
+    inline def compare(rhs: A): Int = Order[A].compare(lhs, rhs)
 
-trait CRigSyntax {
-  given crigSyntax[A: CRig]: {
-    inline def (lhs: A) +      (rhs: A)     : A       = CRig[A].plus(lhs, rhs)
-    inline def (lhs: A) isZero (given Eq[A]): Boolean = CRig[A].isZero(lhs)
-    inline def (lhs: A) *      (rhs: A)     : A       = CRig[A].times(lhs, rhs)
-    inline def (lhs: A) isOne  (given Eq[A]): Boolean = CRig[A].isOne(lhs)
-  }
-}
+trait CRigSyntax
+  given CRigSyntax: [A: CRig](lhs: A) extended with
+    inline def +(rhs: A): A = CRig[A].plus(lhs, rhs)
+    inline def isZero(given Eq[A]): Boolean = CRig[A].isZero(lhs)
+    inline def *(rhs: A): A = CRig[A].times(lhs, rhs)
+    inline def isOne(given Eq[A]): Boolean = CRig[A].isOne(lhs)
 
-trait CRingSyntax extends CRigSyntax {
-  given cringSyntax[A: CRing]: {
-    inline def (lhs: A) unary_-   : A = CRing[A].negate(lhs)
-    inline def (lhs: A) - (rhs: A): A = CRing[A].minus(lhs, rhs)
-  }
-}
+trait CRingSyntax extends CRigSyntax
+  given CRingSyntax: [A: CRing](lhs: A) extended with
+    inline def unary_- : A = CRing[A].negate(lhs)
+    inline def -(rhs: A): A = CRing[A].minus(lhs, rhs)
 
-trait FieldSyntax extends CRingSyntax {
-  given fieldSyntax[A: Field]: {
-    inline def (lhs: A) reciprocal(): A = Field[A].reciprocal(lhs)
-    inline def (lhs: A) / (rhs: A)  : A = Field[A].div(lhs, rhs)
-  }
-}
+trait FieldSyntax extends CRingSyntax
+  given FieldSyntax: [A: Field](lhs: A) extended with
+    inline def reciprocal(): A = Field[A].reciprocal(lhs)
+    inline def /(rhs: A): A = Field[A].div(lhs, rhs)
 
-trait CforSyntax {
+trait CforSyntax with
   import macros._
   import collection.immutable.NumericRange
 
   final type RangeLike = Range | NumericRange[Long]
 
-  final type RangeElem[X <: RangeLike] = X match {
+  final type RangeElem[X <: RangeLike] = X match
     case Range              => Int
     case NumericRange[Long] => Long
-  }
 
   inline def cfor[A](init: => A)(test: => A => Boolean, next: => A => A)(body: => A => Unit): Unit =
     cforInline(init, test, next, body)
@@ -75,7 +62,6 @@ trait CforSyntax {
    */
   inline def [R <: RangeLike](r: => R) peek(body: => RangeElem[R] => Unit): Unit =
     cforRange(r)(body)
-}
 
 trait AllSyntax extends CforSyntax
   with EqSyntax

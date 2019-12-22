@@ -2,7 +2,7 @@ package spire.syntax
 
 import spire.algebra.{Field, CRing}
 
-object primitives {
+object primitives with
 
   inline def [A](n: => Int) as(given A: CRing[A]): A = inline n match
     case 0 => A.zero
@@ -14,4 +14,4 @@ object primitives {
     case 1 => A.one
     case n => A.fromDouble(n)
 
-}
+end primitives
