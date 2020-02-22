@@ -1,4 +1,4 @@
-val dottyVersion = "0.21.0-RC1"
+val dottyVersion = "0.22.0-RC1"
 // val dottyVersion = dottyLatestNightlyBuild.get
 val spireScala3Version = "0.1.0-SNAPSHOT"
 
