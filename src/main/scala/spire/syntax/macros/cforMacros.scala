@@ -6,7 +6,7 @@ import collection.immutable.NumericRange
 
 import spire.syntax.cfor.{RangeLike, RangeElem}
 
-inline def cforInline[R](init: => R, test: => R => Boolean, next: => R => R, body: => R => Unit): Unit =
+inline def cforInline[R](inline init: R, inline test: R => Boolean, inline next: R => R, inline body: R => Unit): Unit =
   var index = init
   while test(index) do
     body(index)
