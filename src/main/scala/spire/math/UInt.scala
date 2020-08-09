@@ -4,7 +4,7 @@ import spire.algebra.{CRig, Order}
 
 object UInt {
 
-  given Order[UInt], CRig[UInt] {
+  given as Order[UInt], CRig[UInt] {
 
     // Order
 
