@@ -78,18 +78,18 @@ trait PartialOrder[@sp A] extends Eq[A] { self =>
 
 abstract class PartialOrderFunctions[P[T] <: PartialOrder[T]] extends EqFunctions[P] {
 
-  def partialCompare[@sp A](x: A, y: A)(given ev: P[A]): Double =
+  def partialCompare[@sp A](x: A, y: A)(using ev: P[A]): Double =
     ev.partialCompare(x, y)
-  def tryCompare[@sp A](x: A, y: A)(given ev: P[A]): Option[Int] =
+  def tryCompare[@sp A](x: A, y: A)(using ev: P[A]): Option[Int] =
     ev.tryCompare(x, y)
 
-  def lteqv[@sp A](x: A, y: A)(given ev: P[A]): Boolean =
+  def lteqv[@sp A](x: A, y: A)(using ev: P[A]): Boolean =
     ev.lteqv(x, y)
-  def lt[@sp A](x: A, y: A)(given ev: P[A]): Boolean =
+  def lt[@sp A](x: A, y: A)(using ev: P[A]): Boolean =
     ev.lt(x, y)
-  def gteqv[@sp A](x: A, y: A)(given ev: P[A]): Boolean =
+  def gteqv[@sp A](x: A, y: A)(using ev: P[A]): Boolean =
     ev.gteqv(x, y)
-  def gt[@sp A](x: A, y: A)(given ev: P[A]): Boolean =
+  def gt[@sp A](x: A, y: A)(using ev: P[A]): Boolean =
     ev.gt(x, y)
 
 }
@@ -99,13 +99,13 @@ object PartialOrder extends PartialOrderFunctions[PartialOrder] {
   /**
    * Access a given `PartialOrder[A]`.
    */
-  inline def apply[A](given PartialOrder[A]) = summon[PartialOrder[A]]
+  inline def apply[A](using PartialOrder[A]) = summon[PartialOrder[A]]
 
   /**
    * Convert a given `PartialOrder[B]` to an `PartialOrder[A]` using the given
    * function `f`.
    */
-  def by[@sp A, @sp B](f: A => B)(given ev: PartialOrder[B]): PartialOrder[A] =
+  def by[@sp A, @sp B](f: A => B)(using ev: PartialOrder[B]): PartialOrder[A] =
     new PartialOrder[A] {
       def partialCompare(x: A, y: A): Double = ev.partialCompare(f(x), f(y))
     }

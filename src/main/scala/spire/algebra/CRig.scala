@@ -23,12 +23,12 @@ trait CRig[@sp(Int, Long, Float, Double) A] {
   /**
     * Tests if `a` is zero.
     */
-  def isZero(a: A)(given ev: Eq[A]): Boolean = ev.eqv(a, zero)
+  def isZero(a: A)(using ev: Eq[A]): Boolean = ev.eqv(a, zero)
 
   /**
     * Tests if `a` is one.
     */
-  def isOne(a: A)(given ev: Eq[A]): Boolean = ev.eqv(a, one)
+  def isOne(a: A)(using ev: Eq[A]): Boolean = ev.eqv(a, one)
 
   // Additional methods
 
@@ -50,29 +50,29 @@ trait CRig[@sp(Int, Long, Float, Double) A] {
 
 trait CRigFunctions[C[T] <: CRig[T]] {
 
-  def plus[@sp(Int, Long, Float, Double) A](x: A, y: A)(given ev: C[A]): A =
+  def plus[@sp(Int, Long, Float, Double) A](x: A, y: A)(using ev: C[A]): A =
     ev.plus(x, y)
 
-  def times[@sp(Int, Long, Float, Double) A](x: A, y: A)(given ev: C[A]): A =
+  def times[@sp(Int, Long, Float, Double) A](x: A, y: A)(using ev: C[A]): A =
     ev.times(x, y)
 
-  def zero[@sp(Int, Long, Float, Double) A](given ev: C[A]): A =
+  def zero[@sp(Int, Long, Float, Double) A](using ev: C[A]): A =
     ev.zero
 
-  def one[@sp(Int, Long, Float, Double) A](given ev: C[A]): A =
+  def one[@sp(Int, Long, Float, Double) A](using ev: C[A]): A =
     ev.one
 
-  def isZero[@sp(Int, Long, Float, Double) A](a: A)(given ev0: C[A], ev1: Eq[A]): Boolean =
+  def isZero[@sp(Int, Long, Float, Double) A](a: A)(using ev0: C[A], ev1: Eq[A]): Boolean =
     ev0.isZero(a)
 
-  def isOne[@sp(Int, Long, Float, Double) A](a: A)(given ev0: C[A], ev1: Eq[A]): Boolean =
+  def isOne[@sp(Int, Long, Float, Double) A](a: A)(using ev0: C[A], ev1: Eq[A]): Boolean =
     ev0.isOne(a)
 
-  def sumN[@sp(Int, Long, Float, Double) A](a: A, n: Int)(given ev: C[A]): A =
+  def sumN[@sp(Int, Long, Float, Double) A](a: A, n: Int)(using ev: C[A]): A =
     ev.sumN(a, n)
 
 }
 
 object CRig extends CRigFunctions[CRig] {
-  inline def apply[A](given CRig[A]) = summon[CRig[A]]
+  inline def apply[A](using CRig[A]) = summon[CRig[A]]
 }

@@ -23,10 +23,10 @@ trait Eq[@sp A] { self =>
 
 abstract class EqFunctions[E[T] <: Eq[T]] {
 
-  def eqv[@sp A](x: A, y: A)(given ev: E[A]): Boolean =
+  def eqv[@sp A](x: A, y: A)(using ev: E[A]): Boolean =
     ev.eqv(x, y)
 
-  def neqv[@sp A](x: A, y: A)(given ev: E[A]): Boolean =
+  def neqv[@sp A](x: A, y: A)(using ev: E[A]): Boolean =
     ev.neqv(x, y)
 
 }
@@ -36,13 +36,13 @@ object Eq extends EqFunctions[Eq] {
   /**
    * Access a given `Eq[A]`.
    */
-  inline def apply[A](given Eq[A]) = summon[Eq[A]]
+  inline def apply[A](using Eq[A]) = summon[Eq[A]]
 
   /**
    * Convert a given `Eq[B]` to an `Eq[A]` using the given
    * function `f`.
    */
-  def by[@sp A, @sp B](f: A => B)(given ev: Eq[B]): Eq[A] =
+  def by[@sp A, @sp B](f: A => B)(using ev: Eq[B]): Eq[A] =
     new Eq[A] {
       def eqv(x: A, y: A) = ev.eqv(f(x), f(y))
     }

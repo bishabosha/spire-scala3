@@ -3,43 +3,49 @@ package syntax
 
 import spire.algebra._
 
-trait EqSyntax with
-  extension EqSyntax on [A: Eq, B](lhs: A)(given ev1: B =:= A)
-    inline def ===(rhs: B): Boolean = Eq[A].eqv(lhs, ev1(rhs))
-    inline def =!=(rhs: B): Boolean = Eq[A].neqv(lhs, ev1(rhs))
+trait EqSyntax:
+  given EqSyntax as AnyRef:
+    extension [A: Eq, B](lhs: A)(using ev1: B =:= A):
+      inline def ===(rhs: B): Boolean = Eq[A].eqv(lhs, ev1(rhs))
+      inline def =!=(rhs: B): Boolean = Eq[A].neqv(lhs, ev1(rhs))
 
-trait PartialOrderSyntax extends EqSyntax
-  extension PartialOrderSyntax on [A: PartialOrder](lhs: A)
-    inline def >(rhs: A): Boolean = PartialOrder[A].gt(lhs, rhs)
-    inline def >=(rhs: A): Boolean = PartialOrder[A].gteqv(lhs, rhs)
-    inline def <(rhs: A): Boolean = PartialOrder[A].lt(lhs, rhs)
-    inline def <=(rhs: A): Boolean = PartialOrder[A].lteqv(lhs, rhs)
+trait PartialOrderSyntax extends EqSyntax:
+  given PartialOrderSyntax as AnyRef:
+    extension [A: PartialOrder](lhs: A):
+      inline def >(rhs: A): Boolean = PartialOrder[A].gt(lhs, rhs)
+      inline def >=(rhs: A): Boolean = PartialOrder[A].gteqv(lhs, rhs)
+      inline def <(rhs: A): Boolean = PartialOrder[A].lt(lhs, rhs)
+      inline def <=(rhs: A): Boolean = PartialOrder[A].lteqv(lhs, rhs)
 
-    inline def partialCompare(rhs: A): Double = PartialOrder[A].partialCompare(lhs, rhs)
-    inline def tryCompare(rhs: A): Option[Int] = PartialOrder[A].tryCompare(lhs, rhs)
+      inline def partialCompare(rhs: A): Double = PartialOrder[A].partialCompare(lhs, rhs)
+      inline def tryCompare(rhs: A): Option[Int] = PartialOrder[A].tryCompare(lhs, rhs)
 
-trait OrderSyntax extends PartialOrderSyntax
-  extension OrderSyntax on [A: Order](lhs: A)
-    inline def compare(rhs: A): Int = Order[A].compare(lhs, rhs)
+trait OrderSyntax extends PartialOrderSyntax:
+  given OrderSyntax as AnyRef:
+    extension [A: Order](lhs: A):
+      inline def compare(rhs: A): Int = Order[A].compare(lhs, rhs)
 
-trait CRigSyntax
-  extension CRigSyntax on [A: CRig](lhs: A)
-    inline def +(rhs: A): A = CRig[A].plus(lhs, rhs)
-    inline def isZero(given Eq[A]): Boolean = CRig[A].isZero(lhs)
-    inline def *(rhs: A): A = CRig[A].times(lhs, rhs)
-    inline def isOne(given Eq[A]): Boolean = CRig[A].isOne(lhs)
+trait CRigSyntax:
+  given CRigSyntax as AnyRef:
+    extension [A: CRig](lhs: A):
+      inline def +(rhs: A): A = CRig[A].plus(lhs, rhs)
+      inline def isZero(using Eq[A]): Boolean = CRig[A].isZero(lhs)
+      inline def *(rhs: A): A = CRig[A].times(lhs, rhs)
+      inline def isOne(using Eq[A]): Boolean = CRig[A].isOne(lhs)
 
-trait CRingSyntax extends CRigSyntax
-  extension CRingSyntax on [A: CRing](lhs: A)
-    inline def unary_- : A = CRing[A].negate(lhs)
-    inline def -(rhs: A): A = CRing[A].minus(lhs, rhs)
+trait CRingSyntax extends CRigSyntax:
+  given CRingSyntax as AnyRef:
+    extension [A: CRing](lhs: A):
+      inline def unary_- : A = CRing[A].negate(lhs)
+      inline def -(rhs: A): A = CRing[A].minus(lhs, rhs)
 
-trait FieldSyntax extends CRingSyntax
-  extension FieldSyntax on [A: Field](lhs: A)
-    inline def reciprocal(): A = Field[A].reciprocal(lhs)
-    inline def /(rhs: A): A = Field[A].div(lhs, rhs)
+trait FieldSyntax extends CRingSyntax:
+  given FieldSyntax as AnyRef:
+    extension [A: Field](lhs: A):
+      inline def reciprocal(): A = Field[A].reciprocal(lhs)
+      inline def /(rhs: A): A = Field[A].div(lhs, rhs)
 
-trait CforSyntax with
+trait CforSyntax:
   import macros._
   import collection.immutable.NumericRange
 

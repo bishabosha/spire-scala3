@@ -1,6 +1,6 @@
 package spire
 
-import spire.syntax.literals.given
+import spire.syntax.literals.{given _}
 import spire.algebra.{Field, CRing}
 
 object GenericLiterals {

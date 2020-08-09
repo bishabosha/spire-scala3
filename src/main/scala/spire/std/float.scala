@@ -4,7 +4,7 @@ import spire.algebra.{Field, Order}
 
 trait FloatInstances {
 
-  given Order[Float], Field[Float] {
+  given as Order[Float], Field[Float] {
 
     // Order
 
