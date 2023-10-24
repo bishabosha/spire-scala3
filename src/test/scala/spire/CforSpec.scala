@@ -6,7 +6,7 @@ import org.scalacheck.Properties
 import org.scalacheck._
 import Prop._
 import Gen.{posNum, choose}
-import syntax.cfor._
+import syntax.cfor.{*, given}
 import collection.mutable.ListBuffer
 
 object CforSpec extends Properties("cfor") {

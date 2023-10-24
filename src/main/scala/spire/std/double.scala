@@ -4,7 +4,7 @@ import spire.algebra.{Field, Order}
 
 trait DoubleInstances {
 
-  given Order[Double], Field[Double] {
+  given Order[Double] with Field[Double] with {
 
     // Field
     override def minus(a:Double, b:Double): Double = a - b

@@ -4,7 +4,7 @@ import spire.algebra.{Order, CRing}
 
 trait LongInstances {
 
-    given Order[Long], CRing[Long] {
+    given Order[Long] with CRing[Long] with {
 
     // CRing
 

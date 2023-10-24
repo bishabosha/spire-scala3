@@ -19,7 +19,7 @@ trait Field[@sp(Int, Long, Float, Double) A] extends CRing[A] { self =>
       if n.isValidInt then
         fromInt(n.toInt)
       else
-        fromBigInt(JBigDecimal(n).toBigInteger.nn)
+        fromBigInt(JBigDecimal(n).nn.toBigInteger.nn)
     else
       fromBigDecimal(BigDecimal(n))
 
@@ -30,22 +30,22 @@ trait Field[@sp(Int, Long, Float, Double) A] extends CRing[A] { self =>
     else
       val remRaw   = n.remainder(Field.one)
       val unscaled = fromBigInt(remRaw.underlying.unscaledValue.nn)
-      val scalePow = fromBigInt(JBigDecimal(scala.math.pow(10.0, remRaw.scale.toDouble)).toBigInteger.nn)
+      val scalePow = fromBigInt(JBigDecimal(scala.math.pow(10.0, remRaw.scale.toDouble)).nn.toBigInteger.nn)
       plus(quot, div(unscaled, scalePow))
 
 }
 
 trait FieldFunctions[F[T] <: Field[T]] extends CRingFunctions[F] {
 
-  def reciprocal[@sp(Int, Long, Float, Double) A](x: A)(given ev: F[A]): A =
+  def reciprocal[@sp(Int, Long, Float, Double) A](x: A)(using ev: F[A]): A =
     ev.reciprocal(x)
 
-  def div[@sp(Int, Long, Float, Double) A](x: A, y: A)(given ev: F[A]): A =
+  def div[@sp(Int, Long, Float, Double) A](x: A, y: A)(using ev: F[A]): A =
     ev.div(x, y)
 
 }
 
 object Field extends FieldFunctions[Field] {
   private val one: BigDecimal = 1
-  inline def apply[A](given Field[A]) = summon[Field[A]]
+  inline def apply[A](using Field[A]) = summon[Field[A]]
 }

@@ -9,22 +9,22 @@ import spire.syntax.order.given
 
 object Complex {
 
-  def i[@specialized(Float, Double) T](given T: Field[T]): Complex[T] =
+  def i[@specialized(Float, Double) T](using T: Field[T]): Complex[T] =
     new Complex(T.zero, T.one)
 
-  def one[@specialized(Float, Double) T](given T: Field[T]): Complex[T] =
+  def one[@specialized(Float, Double) T](using T: Field[T]): Complex[T] =
     new Complex(T.one, T.zero)
 
-  def zero[@specialized(Float, Double) T](given T: Field[T]): Complex[T] =
+  def zero[@specialized(Float, Double) T](using T: Field[T]): Complex[T] =
     new Complex(T.zero, T.zero)
 
-  def fromInt[@specialized(Float, Double) T](n: Int)(given T: Field[T]): Complex[T] =
+  def fromInt[@specialized(Float, Double) T](n: Int)(using T: Field[T]): Complex[T] =
     new Complex(T.fromInt(n), T.zero)
 
   def apply[@specialized(Float, Double) T: Field](real: T): Complex[T] =
     new Complex(real, CRing[T].zero)
 
-  given [A: Field: Order]: Field[Complex[A]], Eq[Complex[A]] {
+  given [A: Field: Order]: Field[Complex[A]] with Eq[Complex[A]] with {
     override def minus(a: Complex[A], b: Complex[A]): Complex[A] = a - b
     def negate(a: Complex[A]): Complex[A] = -a
     def one: Complex[A] = Complex.one
@@ -47,36 +47,36 @@ object Complex {
   */
 final case class Complex[@specialized(Float, Double) T](real: T, imag: T) extends Serializable { lhs =>
 
-  def absSquare(given r: Field[T]): T = real*real + imag*imag
+  def absSquare(using r: Field[T]): T = real*real + imag*imag
 
-  def conjugate(given f: Field[T]): Complex[T] = new Complex(real, -imag)
+  def conjugate(using f: Field[T]): Complex[T] = new Complex(real, -imag)
 
   def asTuple: (T, T) = (real, imag)
 
-  def isZero(given f: Field[T], e: Eq[T]): Boolean = real.isZero && imag.isZero
-  def isImaginary(given f: Field[T], e: Eq[T]): Boolean = real.isZero
-  def isReal(given f: Field[T], e: Eq[T]): Boolean = imag.isZero
+  def isZero(using f: Field[T], e: Eq[T]): Boolean = real.isZero && imag.isZero
+  def isImaginary(using f: Field[T], e: Eq[T]): Boolean = real.isZero
+  def isReal(using f: Field[T], e: Eq[T]): Boolean = imag.isZero
 
-  def eqv(b: Complex[T])(given o: Eq[T]): Boolean = real === b.real && imag === b.imag
-  def neqv(b: Complex[T])(given o: Eq[T]): Boolean = real =!= b.real || imag =!= b.imag
+  def eqv(b: Complex[T])(using o: Eq[T]): Boolean = real === b.real && imag === b.imag
+  def neqv(b: Complex[T])(using o: Eq[T]): Boolean = real =!= b.real || imag =!= b.imag
 
-  def unary_-(given r: Field[T]): Complex[T] = new Complex(-real, -imag)
+  def unary_-(using r: Field[T]): Complex[T] = new Complex(-real, -imag)
 
-  def +(rhs: T)(given r: Field[T]): Complex[T] = new Complex(real + rhs, imag)
-  def -(rhs: T)(given r: Field[T]): Complex[T] = new Complex(real - rhs, imag)
-  def *(rhs: T)(given r: Field[T]): Complex[T] = new Complex(real * rhs, imag * rhs)
-  def /(rhs: T)(given r: Field[T]): Complex[T] = new Complex(real / rhs, imag / rhs)
+  def +(rhs: T)(using r: Field[T]): Complex[T] = new Complex(real + rhs, imag)
+  def -(rhs: T)(using r: Field[T]): Complex[T] = new Complex(real - rhs, imag)
+  def *(rhs: T)(using r: Field[T]): Complex[T] = new Complex(real * rhs, imag * rhs)
+  def /(rhs: T)(using r: Field[T]): Complex[T] = new Complex(real / rhs, imag / rhs)
 
-  def +(b: Complex[T])(given r: Field[T]): Complex[T] =
+  def +(b: Complex[T])(using r: Field[T]): Complex[T] =
     new Complex(real + b.real, imag + b.imag)
 
-  def -(b: Complex[T])(given r: Field[T]): Complex[T] =
+  def -(b: Complex[T])(using r: Field[T]): Complex[T] =
     new Complex(real - b.real, imag - b.imag)
 
-  def *(b: Complex[T])(given r: Field[T]): Complex[T] =
+  def *(b: Complex[T])(using r: Field[T]): Complex[T] =
     new Complex(real * b.real - imag * b.imag, imag * b.real + real * b.imag)
 
-  def /(b: Complex[T])(given f: Field[T], o: Order[T]): Complex[T] = {
+  def /(b: Complex[T])(using f: Field[T], o: Order[T]): Complex[T] = {
     val abs_breal = if (b.real < Field[T].zero) -b.real else b.real
     val abs_bimag = if (b.imag < Field[T].zero) -b.imag else b.imag
 

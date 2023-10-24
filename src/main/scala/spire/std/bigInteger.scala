@@ -6,7 +6,7 @@ import spire.algebra.{CRing, Eq, Order}
 
 trait BigIntegerInstances {
 
-  given Order[BigInteger], CRing[BigInteger] {
+  given Order[BigInteger] with CRing[BigInteger] with {
 
     // Order
 

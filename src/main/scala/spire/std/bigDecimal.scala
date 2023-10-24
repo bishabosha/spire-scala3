@@ -6,7 +6,7 @@ import spire.algebra.{Field, Order}
 
 trait BigDecimalInstances {
 
-  given Order[BigDecimal], Field[BigDecimal] {
+  given Order[BigDecimal] with Field[BigDecimal] with {
 
     // Order
 

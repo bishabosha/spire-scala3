@@ -1,8 +1,13 @@
 package spire
 
+import scala.language.experimental.genericNumberLiterals
+
 import spire.syntax.literals.given
 import spire.algebra.{Field, CRing}
 
+import scala.annotation.experimental
+
+@experimental
 object GenericLiterals {
 
   // Field

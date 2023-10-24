@@ -77,7 +77,7 @@ trait Order[@sp A] extends PartialOrder[A] { self =>
 
 abstract class OrderFunctions[O[T] <: Order[T]] extends PartialOrderFunctions[O] {
 
-  def compare[@sp A](x: A, y: A)(given ev: O[A]): Int =
+  def compare[@sp A](x: A, y: A)(using ev: O[A]): Int =
     ev.compare(x, y)
 
 }
@@ -87,13 +87,13 @@ object Order extends OrderFunctions[Order] {
   /**
    * Access a given `Order[A]`.
    */
-  inline def apply[A](given Order[A]) = summon[Order[A]]
+  inline def apply[A](using Order[A]) = summon[Order[A]]
 
   /**
    * Convert a given `Order[B]` to an `Order[A]` using the given
    * function `f`.
    */
-  def by[@sp A, @sp B](f: A => B)(given ev: Order[B]): Order[A] =
+  def by[@sp A, @sp B](f: A => B)(using ev: Order[B]): Order[A] =
     new Order[A] {
       def compare(x: A, y: A): Int = ev.compare(f(x), f(y))
     }

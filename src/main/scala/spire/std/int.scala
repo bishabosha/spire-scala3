@@ -4,7 +4,7 @@ import spire.algebra.{CRing, Order}
 
 trait IntInstances {
 
-  given Order[Int], CRing[Int] {
+  given Order[Int] with CRing[Int] with {
 
     // Order
 

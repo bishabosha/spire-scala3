@@ -6,7 +6,7 @@ import scala.annotation.tailrec
 
 object ULong {
 
-  given Order[ULong], CRig[ULong] {
+  given Order[ULong] with CRig[ULong] with {
 
     // Order
 

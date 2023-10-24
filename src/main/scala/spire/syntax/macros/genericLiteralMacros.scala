@@ -1,0 +1,35 @@
+package spire.syntax.macros
+
+import scala.quoted.*
+
+import spire.algebra.{Field, CRing}
+
+def fromRingImpl[A: Type](digits: Expr[String], radix: Expr[Int], A: Expr[CRing[A]])(using Quotes): Expr[A] =
+  (digits -> radix): @unchecked match
+  case Expr(ds) -> Expr(r) => fromBigIntImpl(BigInt(ds, r), A)
+  case _                   => '{ $A.fromBigInt(BigInt($digits, $radix)) }
+
+def fromFieldImpl[A: Type](digits: Expr[String], A: Expr[Field[A]])(using Quotes): Expr[A] =
+  digits match
+  case Expr(ds) =>
+    if floating.matches(ds) then
+      val bigdec = BigDecimal(ds)
+      if bigdec.isDecimalDouble || bigdec.isBinaryDouble || bigdec.isExactDouble then bigdec.toDouble match
+        case 0.0 => '{ $A.zero                     }
+        case 1.0 => '{ $A.one                      }
+        case n   => '{ $A.fromDouble(${ Expr(n) }) }
+      else
+        '{ $A.fromBigDecimal(${ Expr(bigdec) }) }
+    else
+      fromBigIntImpl(BigInt(ds), A)
+
+  case _ => '{ $A.fromBigDecimal(BigDecimal($digits)) }
+
+private def fromBigIntImpl[A: Type](bigint: BigInt, A: Expr[CRing[A]])(using Quotes): Expr[A] =
+  if bigint.isValidInt then bigint.toInt match
+    case 0 => '{ $A.zero                  }
+    case 1 => '{ $A.one                   }
+    case n => '{ $A.fromInt(${ Expr(n) }) }
+  else '{ $A.fromBigInt(${ Expr(bigint) }) }
+
+private val floating = """.*[.eE].*""".r

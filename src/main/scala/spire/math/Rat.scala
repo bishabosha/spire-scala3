@@ -87,7 +87,7 @@ object Rat {
 
   def unapply(r: Rat): (BigInt, BigInt) = (r.num, r.den)
 
-  given Order[Rat], Field[Rat] {
+  given Order[Rat] with Field[Rat] with {
 
     def compare(x: Rat, y: Rat): Int = x `compare` y
 
